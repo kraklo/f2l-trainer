@@ -7,6 +7,7 @@
 
 import { type GanCubeEvent } from 'gan-web-bluetooth';
 import { randomScrambleForEvent } from 'cubing/scramble';
+import '../scramble-setup';
 import { type App, type View } from '../app';
 import { moveToString } from '../cube/cube';
 import { crossSolved, slotSolved, slotsFor } from '../cube/pieces';

@@ -3,6 +3,7 @@
 
 import { cubeTimestampCalcSkew, type GanCubeEvent, type GanCubeMove } from 'gan-web-bluetooth';
 import { randomScrambleForEvent } from 'cubing/scramble';
+import '../src/scramble-setup';
 import { Cube } from '../src/device/gan';
 import { referenceGrip, relative, snap } from '../src/device/gyro';
 import { checkRecord, gyroRate } from '../src/record/checks';
