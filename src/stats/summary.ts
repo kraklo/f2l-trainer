@@ -3,7 +3,7 @@
 import { type SolveRecord } from '../record/types';
 import { type Analysis } from '../solve/analyse';
 
-export const SUMMARY_VERSION = 1;
+export const SUMMARY_VERSION = 2; // bump when the analysis changes so History recomputes
 
 export interface PairSummary {
   /** 1-4: which pair of the solve this was. */

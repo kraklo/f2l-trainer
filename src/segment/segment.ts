@@ -7,7 +7,9 @@
 //   CROSS_BREAK_MOVES in a row (a real rebuild takes longer);
 // - slots are judged only at checkpoints where the cross is intact; a slot is done at the last
 //   checkpoint where it became solved and then stayed solved at every later checkpoint. This handles
-//   slots broken and rebuilt, and several slots finishing on the same move.
+//   slots broken and rebuilt, and several slots finishing on the same move. A slot broken and
+//   restored while another pair was being solved keeps its first finish instead (the other pair's
+//   algorithm disturbed it), and that other pair's stage runs until the restore.
 
 import { applyMove, type Facelets, type Move } from '../cube/cube';
 import { crossSolved, slotSolved, slotsFor, type Slot } from '../cube/pieces';
@@ -50,11 +52,35 @@ export function segmentRaw(start: Facelets, moves: Move[]): RawSegmentation | nu
   }
 
   const checkpoints = crossOk.flatMap((ok, i) => (ok && i >= crossAt ? [i] : []));
-  const slots = slotsFor(cross).map((slot) => {
-    let k = checkpoints.length - 1;
-    while (k > 0 && slotSolved(states[checkpoints[k - 1]], slot)) k--;
-    return { slot, end: checkpoints[k] - 1 };
+  const all = slotsFor(cross);
+  // solved[s][k]: slot s is solved at checkpoint k
+  const solved = all.map((slot) => checkpoints.map((i) => slotSolved(states[i], slot)));
+  const last = checkpoints.length - 1;
+
+  // Each slot starts from its final run of solved checkpoints...
+  const runStart = solved.map((row) => {
+    let k = last;
+    while (k > 0 && row[k - 1]) k--;
+    return k;
   });
+  // ...but a slot broken and restored while another pair went in was collateral damage from that
+  // pair's algorithm: it keeps its earlier finish, and the other pair's stage runs to the restore.
+  const extendTo = runStart.slice();
+  for (let s = 0; s < all.length; s++) {
+    for (;;) {
+      const k = runStart[s];
+      let b = k - 1; // first broken checkpoint before the final run
+      while (b > 0 && !solved[s][b - 1]) b--;
+      if (b <= 0 || k <= 0) break;
+      const others = all.flatMap((_, t) => (t !== s && !solved[t][b - 1] && solved[t][k] ? [t] : []));
+      if (!others.length) break; // a genuine rebuild
+      for (const t of others) extendTo[t] = Math.max(extendTo[t], k);
+      let p = b - 1;
+      while (p > 0 && solved[s][p - 1]) p--;
+      runStart[s] = p;
+    }
+  }
+  const slots = all.map((slot, s) => ({ slot, end: checkpoints[Math.max(runStart[s], extendTo[s])] - 1 }));
 
   return { cross, crossEnd: crossAt - 1, slots: slots.sort((a, b) => a.end - b.end), f2lEnd: at - 1 };
 }
