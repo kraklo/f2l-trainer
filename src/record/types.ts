@@ -40,12 +40,13 @@ export interface SolveRecord {
   startFacelets: string;
   /** Cube-reported facelets after the solve. */
   endFacelets?: string;
+  /** Every turn made while scrambling, including corrections. */
+  scrambleMoves: RawMove[];
   /** Turns made during inspection, before the solve started. */
   inspectionMoves: RawMove[];
   moves: RawMove[];
+  /** From the start of scrambling; the scramble grip is the gyro reference. */
   gyro: GyroSample[];
-  /** Quaternion read while holding white top, green front. */
-  calib?: Quat;
   hardware: Hardware;
   status: 'ok' | 'desynced' | 'dnf';
 }

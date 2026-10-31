@@ -18,18 +18,21 @@ npm run build
 Web Bluetooth needs Chrome or Edge. If the cube's MAC address can't be read automatically, enable
 `chrome://flags/#enable-experimental-web-platform-features` or enter the MAC when prompted.
 
-## M0: recording capture fixtures
+## Recording solves
 
-The spike page at `/spike/` connects through
-[gan-web-bluetooth](https://github.com/afedotov/gan-web-bluetooth) and logs the hardware name,
-protocol, gyro rate, clock skew and every move with host and cube timestamps.
+The recording page at `/spike/` connects through
+[gan-web-bluetooth](https://github.com/afedotov/gan-web-bluetooth). It logs the hardware, gyro rate,
+clock skew and every move with host and cube timestamps.
 
 1. Start with the cube solved, then press **Connect**.
-2. Optional: press **Calibrate gyro**. Calibration now comes from the scramble grip, so this is no longer needed.
-3. Press **New scramble** and follow the moves. A wrong turn updates the remaining moves.
-4. Inspect, then solve. The solve starts on your first turn.
-5. Check the results under the scramble, then press **Save solve JSON**.
-6. Move the downloaded files into `fixtures/solves/`. `npm test` then runs the capture checks on each one.
+2. Press **New scramble** and follow the moves. A wrong turn updates the remaining moves. Scramble
+   holding white top, green front: that grip is the gyro reference for the solve.
+3. Inspect, then solve. The solve starts on your first turn.
+4. The solve is saved to IndexedDB automatically. **Export all** and **Import** back the solves up as JSON.
+5. To add a test fixture, press **Download fixture** and move the file into `fixtures/solves/`.
+
+The recorder checks the cube's own state reports (about one every three turns) against the tracked
+state, and marks the solve `desynced` if they ever disagree.
 
 Each check must pass for a fixture to count:
 
