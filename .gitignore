@@ -1,0 +1,4 @@
+node_modules/
+dist/
+*.xlsx
+.DS_Store
