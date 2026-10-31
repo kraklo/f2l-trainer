@@ -1,222 +1,126 @@
-// Analysis screen: timeline, per-stage table, and per-stage detail with replays of what you did next
-// to the suggestion, cross options and the pair choice at each decision point.
+// Analysis screen: step through the solve (overview, cross, each pair, last layer). Each step plays
+// what you did in a single 3D player and lists what you could have done instead; clicking an option
+// plays it from the same state.
+//
+// The layout and the player are built once while the screen is shown (re-attaching a TwistyPlayer
+// adds another 3D view); stepping only swaps the panel and the player's setup and moves.
 
 import { type App, type View } from '../app';
-import { fromFaceletString, moveToString } from '../cube/cube';
+import { fromFaceletString } from '../cube/cube';
 import { COLOUR_NAMES } from '../cube/pieces';
-import { type StageSegment } from '../normalise/normalise';
 import { type SolveRecord } from '../record/types';
 import { CubeView } from '../render/cubeview';
 import { pairDiagram } from '../render/svg';
 import { type Analysis } from '../solve/analyse';
-import { type DecisionPoint, type SlotOption } from '../solve/analyse-f2l';
-import { type F2LSolution } from '../solve/f2l';
 import { toFR } from '../solve/f2lcase';
 import { viewFrom } from '../solve/view';
 import { clear, fmtTime, h } from './dom';
 import { algCubingUrl } from './links';
+import { buildSteps, type OptionItem, type Playable, type Step } from './steps';
 
-/** Puts a replay of `alg` from `setup` into `container` (a TwistyPlayer in the app). */
-export type Replay = (container: HTMLElement, setup: string, alg: string) => void;
-
-export interface AnalysisUi {
-  expanded: Set<number>;
-  /** Selected suggestion per stage index. */
-  selected: Map<number, string>;
-  toggle(stage: number): void;
-  select(stage: number, alg: string): void;
-  replay: Replay;
-}
-
-const colour = (c: number) => COLOUR_NAMES[c];
 const sec = (ms: number) => (ms / 1000).toFixed(2);
-const cost = (c: number) => (Number.isFinite(c) ? c.toFixed(1) : '–');
-
-function tokenAlg(a: Analysis, from: number, to: number): string {
-  return a.recon.tokens.slice(from, to + 1).map((t) => moveToString(t.move)).join(' ');
-}
-
-/** Setup that reaches the cube as held just before stage `i`. */
-function setupBefore(record: SolveRecord, a: Analysis, i: number): string {
-  return [record.scramble, a.recon.inspection, tokenAlg(a, 0, a.recon.segments[i].startIdx - 1)].filter(Boolean).join(' ');
-}
-
-function stageName(s: StageSegment, i: number): string {
-  return s.kind === 'cross' ? 'Cross' : s.kind === 'll' ? 'Last layer' : `Pair ${i}`;
-}
 
 function reconstructionText(a: Analysis): string {
   const lines = a.recon.inspection ? [`${a.recon.inspection} // inspection`] : [];
   a.recon.segments.forEach((s, i) => {
-    const alg = tokenAlg(a, s.startIdx, s.endIdx);
-    const label = s.kind === 'pair' ? `pair ${i}: ${s.slot}` : s.kind === 'll' ? 'last layer' : `${colour(a.recon.cross)} cross`;
+    const alg = a.recon.tokens.slice(s.startIdx, s.endIdx + 1).map((t) => t.move.base + ['', '', '2', "'"][t.move.amount]).join(' ');
+    const label = s.kind === 'pair' ? `pair ${i}: ${s.slot}` : s.kind === 'll' ? 'last layer' : `${COLOUR_NAMES[a.recon.cross]} cross`;
     lines.push(`${alg || '.'} // ${label}`);
   });
   return lines.join('\n');
 }
 
-function timeline(a: Analysis): HTMLElement {
+function diagramFor(item: OptionItem): SVGSVGElement | null {
+  if (!item.diagram) return null;
+  const { decision: d, position } = item.diagram;
+  const v = viewFrom(fromFaceletString(d.state), toFR(position));
+  return pairDiagram(v.facelets, v.colours.map((c) => d.colours[c]));
+}
+
+export interface StepUi {
+  /** Option currently shown in the player, or null for your own moves. */
+  selected: string | null;
+  goTo(step: number): void;
+  play(item: OptionItem | null): void;
+}
+
+/** Overview panel: summary, timeline and stage table (rows jump to their step). */
+export function overviewPanel(record: SolveRecord, a: Analysis, steps: Step[], ui: StepUi): HTMLElement {
   const segs = a.recon.segments;
-  const total = segs.reduce((s, x) => s + x.durationMs, 0) || 1;
-  return h('div', { class: 'timeline' }, segs.map((s, i) => {
-    const look = s.durationMs ? Math.min(1, s.recognitionMs / s.durationMs) : 0;
-    return h('div', { class: `seg ${s.kind}`, style: { flexGrow: String(Math.max(s.durationMs, 1) / total) }, title: `${stageName(s, i)}: ${sec(s.durationMs)} s, look-ahead ${sec(s.recognitionMs)} s` },
-      h('div', { class: 'look', style: { width: `${(look * 100).toFixed(1)}%` } }),
-      h('span', null, s.kind === 'pair' ? `P${i}` : s.kind === 'cross' ? 'X' : 'LL'));
-  }));
-}
-
-function solutionList(stage: number, sols: F2LSolution[], ui: AnalysisUi, selected: string | undefined): HTMLElement {
-  return h('ul', { class: 'solutions' }, sols.map((s) => h('li', { class: s.alg === selected ? 'selected' : '', onclick: () => ui.select(stage, s.alg) },
-    h('span', { class: 'cost' }, cost(s.cost)),
-    h('code', null, s.alg),
-    s.source === 'known' ? h('span', { class: 'muted small' }, ` ${s.votes ?? 0} votes`) : null,
-    s.penalty ? h('span', { class: 'muted small', title: 'Goes into a front slot while back slots are open' }, ' front') : null)));
-}
-
-function replays(ui: AnalysisUi, setup: string, yours: string, suggestion: string | undefined, suggestionSetup = setup): HTMLElement {
-  const a = h('div', { class: 'replay' }), b = h('div', { class: 'replay' });
-  ui.replay(a, setup, yours);
-  if (suggestion) ui.replay(b, suggestionSetup, suggestion);
-  return h('div', { class: 'replays' },
-    h('figure', null, a, h('figcaption', null, 'You: ', h('code', null, yours || '–'))),
-    h('figure', null, b, h('figcaption', null, 'Suggestion: ', h('code', null, suggestion ?? '–'))));
-}
-
-function crossDetail(record: SolveRecord, a: Analysis, ui: AnalysisUi): HTMLElement {
-  const c = a.cross;
-  const selected = ui.selected.get(0) ?? c.used.solutions[0]?.alg;
-  const allowed = (col: number) => c.colours.find((x) => x.colour === col);
-  const xc = (x: typeof c.xcross.best) => h('span', null, `${colour(x.colour)} cross + ${x.slot}, ${x.length} moves: `, h('code', null, `${x.rotation ? `(${x.rotation}) ` : ''}${x.alg}`));
-  return h('div', { class: 'detail' },
-    // suggestions are written for a grip with the cross on D, which may differ from your inspection grip
-    replays(ui, setupBefore(record, a, 0), c.used.alg, selected, [record.scramble, c.used.rotation].filter(Boolean).join(' ')),
-    h('div', { class: 'detail-cols' },
-      h('div', null,
-        h('h4', null, `${colour(c.used.colour)} cross: optimal ${c.used.optimal}, you ${c.used.turns}`),
-        h('ul', { class: 'solutions' }, c.used.solutions.map((s) => h('li', { class: s.alg === selected ? 'selected' : '', onclick: () => ui.select(0, s.alg) },
-          h('span', { class: 'cost' }, cost(s.cost)), h('code', null, s.alg), h('span', { class: 'muted small' }, ` ${s.length} moves`))))),
-      h('div', null,
-        h('h4', null, 'Every colour'),
-        h('table', { class: 'compact' }, h('tbody', null, c.colours.map((x) => h('tr', { class: x.colour === c.used.colour ? 'chosen' : '' },
-          h('td', null, colour(x.colour)), h('td', { class: 'num' }, String(x.optimal)),
-          h('td', null, h('code', null, `${x.rotation ? `(${x.rotation}) ` : ''}${x.solutions[0]?.alg ?? ''}`)))))),
-        c.bestAllowedColour !== c.used.colour && (allowed(c.bestAllowedColour)?.optimal ?? 99) < c.used.optimal
-          ? h('p', { class: 'flag' }, `⚑ ${colour(c.bestAllowedColour)} had a ${allowed(c.bestAllowedColour)?.optimal}-move cross`) : null,
-        h('h4', null, 'Xcross'),
-        h('p', null, 'Best: ', xc(c.xcross.best)),
-        h('p', null, `On ${colour(c.used.colour)}: `, xc(c.xcross.bestOnUsed), h('span', { class: 'muted' }, ` (you: ${c.crossPlusPairTurns} turns for cross + first pair)`)))));
-}
-
-function optionRow(d: DecisionPoint, o: SlotOption): HTMLElement {
-  const v = viewFrom(fromFaceletString(d.state), toFR(o.position));
-  const diagram = pairDiagram(v.facelets, v.colours.map((c) => d.colours[c]));
-  return h('tr', { class: o.slot === d.chosen?.slot ? 'chosen' : '' },
-    h('td', { class: 'diagram-cell' }, diagram),
-    h('td', null, o.slot, h('div', { class: 'muted small' }, o.position)),
-    h('td', null, o.case ? `F2L ${o.case}` : 'piece in another slot'),
-    h('td', { class: 'num' }, cost(o.best)),
-    h('td', null, h('code', null, (o.search[0] ?? o.known[0])?.alg ?? '')));
-}
-
-function pairDetail(record: SolveRecord, a: Analysis, i: number, ui: AnalysisUi): HTMLElement | null {
-  const d = a.f2l.find((x) => x.after === i - 1);
-  if (!d) return null;
-  const seg = a.recon.segments[i];
-  const option = d.chosen?.option;
-  const sols = option ? [...option.search, ...option.known].sort((x, y) => x.cost - y.cost) : [];
-  const selected = ui.selected.get(i) ?? sols[0]?.alg;
-  const cheapest = d.options[0];
-  return h('div', { class: 'detail' },
-    replays(ui, setupBefore(record, a, i), tokenAlg(a, seg.startIdx, seg.endIdx), selected),
-    h('div', { class: 'detail-cols' },
-      h('div', null,
-        h('h4', null, `${seg.slot}: you ${cost(d.chosen?.cost ?? NaN)}, best ${cost(option?.best ?? NaN)}`),
-        option ? h('h5', null, 'Found by search') : null,
-        option ? solutionList(i, option.search, ui, selected) : null,
-        option?.known.length ? h('h5', null, 'Known algorithms') : null,
-        option ? solutionList(i, option.known, ui, selected) : null),
-      h('div', null,
-        h('h4', null, 'Pair choice'),
-        d.cheaperSlot ? h('p', { class: 'flag' }, `⚑ ${cheapest.slot} was ${cost((option?.best ?? 0) - cheapest.best)} cheaper`) : null,
-        d.freePairs.length ? h('p', { class: 'muted' }, `Free pairs: ${d.freePairs.join(', ')}`) : null,
-        h('table', { class: 'compact options' }, h('tbody', null, d.options.map((o) => optionRow(d, o)))))));
-}
-
-function bestLabel(a: Analysis, s: StageSegment, i: number): string {
-  if (s.kind === 'cross') return `optimal ${a.cross.used.optimal}`;
-  if (s.kind === 'll') return '';
-  const d = a.f2l.find((x) => x.after === i - 1);
-  if (!d?.chosen?.option) return s.turns ? '' : 'with previous';
-  return `cost ${cost(d.chosen.cost)} → ${cost(d.chosen.option.best)}${d.cheaperSlot ? ' ⚑' : ''}`;
-}
-
-/** The analysis content for a solve. */
-export function analysisContent(record: SolveRecord, a: Analysis, ui: AnalysisUi): HTMLElement[] {
-  const segs = a.recon.segments;
-  const turns = a.recon.tokens.filter((t) => !t.rotation).length;
   const total = segs.reduce((s, x) => s + x.durationMs, 0);
-  const rows: HTMLElement[] = [];
-  segs.forEach((s, i) => {
-    const open = ui.expanded.has(i);
-    rows.push(h('tr', { class: `stage ${s.kind} ${open ? 'open' : ''}`, onclick: s.kind === 'll' ? undefined : () => ui.toggle(i) },
-      h('td', null, s.kind === 'll' ? '' : open ? '▾' : '▸', ' ', stageName(s, i), s.slot ? h('span', { class: 'muted small' }, ` ${s.slot} → ${s.heldSlot}`) : null),
-      h('td', { class: 'num' }, String(s.turns)),
-      h('td', { class: 'num' }, sec(s.durationMs)),
-      h('td', { class: 'num' }, s.tps.toFixed(1)),
-      h('td', { class: 'num' }, s.kind === 'cross' ? '' : sec(s.recognitionMs)),
-      h('td', null, bestLabel(a, s, i))));
-    if (open) {
-      const detail = s.kind === 'cross' ? crossDetail(record, a, ui) : pairDetail(record, a, i, ui);
-      if (detail) rows.push(h('tr', { class: 'detail-row' }, h('td', { colspan: '6' }, detail)));
-    }
-  });
-  return [
+  const turns = steps[0].yours.turns;
+  const stepOf = (key: string) => steps.findIndex((s) => s.key === key);
+  const keyOf = (i: number) => (segs[i].kind === 'cross' ? 'cross' : segs[i].kind === 'll' ? 'll' : `pair-${i}`);
+  return h('div', { class: 'step-panel' },
     h('div', { class: 'summary' },
       h('div', { class: 'big' }, fmtTime(total)),
-      h('div', null, `${turns} turns · ${(turns / (total / 1000 || 1)).toFixed(1)} TPS · ${colour(a.recon.cross)} cross · ${new Date(record.startedAt).toLocaleString()}`),
+      h('div', null, `${turns} turns · ${(turns / (total / 1000 || 1)).toFixed(1)} TPS · ${COLOUR_NAMES[a.recon.cross]} cross · ${new Date(record.startedAt).toLocaleString()}`),
       record.status === 'desynced' ? h('div', { class: 'flag' }, '⚑ The cube and the recording disagree: this solve is excluded from stats') : null,
       h('div', { class: 'muted small' }, 'Scramble: ', h('code', null, record.scramble)),
       h('a', { href: algCubingUrl(record.scramble, reconstructionText(a), `F2L Trainer ${new Date(record.startedAt).toLocaleDateString()}`), target: '_blank', rel: 'noopener' }, 'Reconstruction on alg.cubing.net')),
-    timeline(a),
+    h('div', { class: 'timeline' }, segs.map((s, i) => {
+      const look = s.durationMs ? Math.min(1, s.recognitionMs / s.durationMs) : 0;
+      return h('div', { class: `seg ${s.kind}`, style: { flexGrow: String(Math.max(s.durationMs, 1) / (total || 1)) }, title: `${sec(s.durationMs)} s, look-ahead ${sec(s.recognitionMs)} s`, onclick: () => ui.goTo(stepOf(keyOf(i))) },
+        h('div', { class: 'look', style: { width: `${(look * 100).toFixed(1)}%` } }),
+        h('span', null, s.kind === 'pair' ? `P${i}` : s.kind === 'cross' ? 'X' : 'LL'));
+    })),
     h('table', { class: 'stages' },
-      h('thead', null, h('tr', null, ['Stage', 'Turns', 'Time', 'TPS', 'Look-ahead', 'You → best'].map((t) => h('th', null, t)))),
-      h('tbody', null, rows)),
-  ];
+      h('thead', null, h('tr', null, ['Stage', 'Turns', 'Time', 'Look-ahead', 'You → best'].map((t) => h('th', null, t)))),
+      h('tbody', null, steps.slice(1).map((st, k) => h('tr', { class: 'clickable', onclick: () => ui.goTo(k + 1) },
+        h('td', null, st.title, st.segment?.slot ? h('span', { class: 'muted small' }, ` ${st.segment.slot}`) : null),
+        h('td', { class: 'num' }, String(st.yours.turns)),
+        h('td', { class: 'num' }, sec(st.yours.ms)),
+        h('td', { class: 'num' }, st.key === 'cross' ? '' : sec(st.yours.lookMs)),
+        h('td', null,
+          st.key === 'cross' ? `${st.yours.turns} → ${a.cross.used.optimal} moves` : st.yours.cost !== undefined && st.yours.best !== undefined ? `${st.yours.cost.toFixed(1)} → ${st.yours.best.toFixed(1)}` : '',
+          st.flags.length && st.key !== 'll' ? h('span', { class: 'flag' }, ' ⚑') : null))))));
+}
+
+/** A cross/pair/last-layer panel: what you did, flags, and the option groups. */
+export function stepPanel(step: Step, ui: StepUi): HTMLElement {
+  const y = step.yours;
+  return h('div', { class: 'step-panel' },
+    h('h2', null, step.title, step.segment?.slot ? h('span', { class: 'muted' }, ` · ${step.segment.slot} → ${step.segment.heldSlot}`) : null),
+    h('div', { class: 'stats-line muted' },
+      `${y.turns} turns · ${sec(y.ms)} s`, step.key !== 'cross' ? ` · look-ahead ${sec(y.lookMs)} s` : '',
+      y.cost !== undefined ? ` · cost ${y.cost.toFixed(1)}` : '', y.best !== undefined ? ` (best ${y.best.toFixed(1)})` : ''),
+    h('div', { class: `yours ${ui.selected === null ? 'selected' : ''}`, onclick: () => ui.play(null) },
+      h('div', { class: 'label' }, 'You did'),
+      h('code', null, y.alg || '—')),
+    step.flags.map((f) => h('p', { class: 'flag' }, `⚑ ${f}`)),
+    step.groups.filter((g) => g.items.length).map((g) => h('section', { class: 'option-group' },
+      h('h3', null, g.title),
+      h('ul', { class: 'options' }, g.items.map((item) => h('li', { class: item.id === ui.selected ? 'selected' : '', onclick: () => ui.play(item) },
+        diagramFor(item),
+        h('div', { class: 'option-body' },
+          item.label ? h('div', { class: 'option-label' }, item.label) : null,
+          h('code', null, item.alg),
+          item.note ? h('div', { class: 'muted small' }, item.note) : null),
+        item.cost !== undefined ? h('span', { class: 'cost' }, item.cost.toFixed(1)) : null))))),
+  );
 }
 
 export class AnalysisView implements View {
   el = h('section', { class: 'view analysis' });
+  private nav = h('nav', { class: 'steps' });
+  private playerBox = h('div', { class: 'player-box' });
+  private nowPlaying = h('div', { class: 'now-playing muted small' });
+  private panel = h('div', { class: 'panel-box' });
+  private player: CubeView | null = null;
   private record: SolveRecord | null = null;
   private analysis: Analysis | null | 'pending' | Error = null;
-  private ui: AnalysisUi;
-  private players: CubeView[] = [];
+  private steps: Step[] = [];
+  private step = 0;
+  private selected: OptionItem | null = null;
+  private onKey = (e: KeyboardEvent) => {
+    if ((e.target as HTMLElement).closest('input, textarea, select')) return;
+    if (e.key === 'ArrowRight') this.goTo(this.step + 1);
+    else if (e.key === 'ArrowLeft') this.goTo(this.step - 1);
+    else return;
+    e.preventDefault();
+  };
 
-  constructor(private app: App) {
-    this.ui = {
-      expanded: new Set(),
-      selected: new Map(),
-      toggle: (i) => {
-        if (!this.ui.expanded.delete(i)) this.ui.expanded.add(i);
-        this.render();
-      },
-      select: (i, alg) => {
-        this.ui.selected.set(i, alg);
-        this.render();
-      },
-      replay: (container, setup, alg) => {
-        const v = new CubeView(container, { controls: true, hintFacelets: false, tempoScale: 1.5 });
-        v.show(setup, alg);
-        this.players.push(v);
-      },
-    };
-  }
-
-  /** Drop the replays: a TwistyPlayer that is detached and re-attached adds another 3D view. */
-  leave() {
-    clear(this.el);
-    this.players = [];
-  }
+  constructor(private app: App) {}
 
   get hasSolve(): boolean {
     return !!this.record;
@@ -225,11 +129,14 @@ export class AnalysisView implements View {
   show(record: SolveRecord) {
     this.record = record;
     this.analysis = 'pending';
-    this.ui.expanded.clear();
-    this.ui.selected.clear();
+    this.steps = [];
+    this.step = 0;
+    this.selected = null;
     this.app.analyser.analyse(record, this.app.settings.analysis).then(
       (a) => {
-        if (this.record === record) this.analysis = a;
+        if (this.record !== record) return;
+        this.analysis = a;
+        this.steps = a ? buildSteps(record, a) : [];
         if (this.app.view === 'analysis') this.render();
       },
       (e) => {
@@ -239,14 +146,57 @@ export class AnalysisView implements View {
     );
   }
 
+  /** Drop the player: a TwistyPlayer that is detached and re-attached adds another 3D view. */
+  leave() {
+    document.removeEventListener('keydown', this.onKey);
+    this.player?.player.remove();
+    this.player = null;
+    clear(this.el);
+  }
+
+  private goTo(i: number) {
+    if (i < 0 || i >= this.steps.length || i === this.step) return;
+    this.step = i;
+    this.selected = null;
+    this.renderStep();
+  }
+
+  private play(item: OptionItem | null) {
+    this.selected = item;
+    this.renderStep();
+    this.player?.play();
+  }
+
+  private load(p: Playable, label: string) {
+    this.player?.show(p.setup, p.alg);
+    clear(this.nowPlaying, label);
+  }
+
+  private renderStep() {
+    const step = this.steps[this.step];
+    const a = this.analysis as Analysis;
+    clear(this.nav,
+      h('button', { class: 'mini', disabled: this.step === 0, onclick: () => this.goTo(this.step - 1) }, '← Prev'),
+      this.steps.map((s, i) => h('button', { class: `tab ${i === this.step ? 'active' : ''} ${s.flags.length && s.key !== 'll' ? 'flagged' : ''}`, onclick: () => this.goTo(i) }, s.title)),
+      h('button', { class: 'mini', disabled: this.step === this.steps.length - 1, onclick: () => this.goTo(this.step + 1) }, 'Next →'));
+    const ui: StepUi = { selected: this.selected?.id ?? null, goTo: (i) => this.goTo(i), play: (item) => this.play(item) };
+    clear(this.panel, step.key === 'overview' ? overviewPanel(this.record!, a, this.steps, ui) : stepPanel(step, ui));
+    if (this.selected) this.load(this.selected, `Option: ${this.selected.alg}`);
+    else this.load(step.yours, step.key === 'overview' ? 'Your whole solve' : `You: ${step.yours.alg || '—'}`);
+  }
+
   render() {
-    // TwistyPlayers are rebuilt with the DOM
-    this.players = [];
     const a = this.analysis;
     if (!this.record) return clear(this.el, h('p', { class: 'muted' }, 'Do a solve, or open one from History.'));
     if (a === 'pending') return clear(this.el, h('p', { class: 'muted' }, 'Analysing… (the first run builds the solver tables)'));
     if (a instanceof Error) return clear(this.el, h('p', { class: 'bad' }, `Analysis failed: ${a.message}`));
     if (!a) return clear(this.el, h('p', { class: 'bad' }, 'No F2L found in this solve.'));
-    clear(this.el, ...analysisContent(this.record, a, this.ui));
+    if (!this.el.contains(this.playerBox)) {
+      clear(this.el, this.nav, h('div', { class: 'step-layout' }, h('div', { class: 'player-col' }, this.playerBox, this.nowPlaying), this.panel));
+    }
+    if (!this.player) this.player = new CubeView(this.playerBox, { controls: true, hintFacelets: false, tempoScale: 1.5 });
+    document.removeEventListener('keydown', this.onKey);
+    document.addEventListener('keydown', this.onKey);
+    this.renderStep();
   }
 }

@@ -1,62 +1,63 @@
 // @vitest-environment jsdom
 import { describe, expect, it, vi } from 'vitest';
-import { applyMoves, normalized, parseAlg, solvedFacelets } from '../cube/cube';
-import { crossSolved, pairName, slotSolved, slotsFor } from '../cube/pieces';
+import { applyMoves, equalFacelets, normalized, parseAlg, solvedFacelets } from '../cube/cube';
+import { crossSolved, slotName, slotSolved, slotsFor } from '../cube/pieces';
 import { analyse } from '../solve/analyse';
 import { buildTables } from '../solve/tables';
 import { loadExpected, loadSolveFixture, replayFixture, solveFixtureNames } from '../test/fixtures';
-import { analysisContent, type AnalysisUi } from './analysis';
+import { overviewPanel, stepPanel, type StepUi } from './analysis';
+import { buildSteps, type Goal, type Playable } from './steps';
 
-// TwistyPlayer needs WebGL; the content is tested through the replay hook instead.
+// TwistyPlayer needs WebGL; the panels and the step model are tested without it.
 vi.mock('../render/cubeview', () => ({ CubeView: class {} }));
 
 const t = buildTables();
 const checked = solveFixtureNames.filter((n) => loadExpected(n));
 
-function stateAfter(setup: string, alg: string) {
-  return normalized(applyMoves(solvedFacelets(), parseAlg(`${setup} ${alg}`)));
+function reaches(p: Playable, goal: Goal): boolean {
+  const s = normalized(applyMoves(solvedFacelets(), parseAlg(`${p.setup} ${p.alg}`)));
+  if (!crossSolved(s, goal.cross)) return false;
+  return !goal.slot || slotSolved(s, slotsFor(goal.cross).find((x) => slotName(x) === goal.slot)!);
 }
 
-describe.skipIf(!checked.length).each(checked)('analysis screen for %s', (name) => {
+describe.skipIf(!checked.length).each(checked)('analysis steps for %s', (name) => {
   const record = replayFixture(loadSolveFixture(name));
   const a = analyse(t, record)!;
-  const replays: { setup: string; alg: string }[] = [];
-  const ui: AnalysisUi = {
-    expanded: new Set([0, 1, 2, 3, 4]),
-    selected: new Map(),
-    toggle: () => {},
-    select: () => {},
-    replay: (_el, setup, alg) => void replays.push({ setup, alg }),
-  };
-  const content = analysisContent(record, a, ui);
-  const root = document.createElement('div');
-  root.append(...content);
+  const steps = buildSteps(record, a);
 
-  it('renders the summary, timeline and every stage with its details', () => {
-    expect(root.querySelectorAll('.timeline .seg')).toHaveLength(6);
-    expect(root.querySelectorAll('tr.stage')).toHaveLength(6);
-    expect(root.querySelectorAll('tr.detail-row')).toHaveLength(5);
-    expect(root.querySelectorAll('.options .diagram').length).toBe(4 + 3 + 2 + 1);
-    expect(root.querySelector('a')!.getAttribute('href')).toMatch(/^https:\/\/alg\.cubing\.net\/\?setup=/);
+  it('walks overview, cross, four pairs and the last layer', () => {
+    expect(steps.map((s) => s.key)).toEqual(['overview', 'cross', 'pair-1', 'pair-2', 'pair-3', 'pair-4', 'll']);
   });
 
-  it('replays your stage and the suggestion from the right states', () => {
-    expect(replays).toHaveLength(10); // yours + suggestion for the cross and four pairs
-    const pairs = a.recon.segments.filter((s) => s.kind === 'pair');
-    const done = new Set<string>();
-    for (let i = 0; i < 5; i++) {
-      const [yours, suggestion] = [replays[2 * i], replays[2 * i + 1]];
-      if (i === 0) {
-        expect(crossSolved(stateAfter(yours.setup, yours.alg), a.recon.cross)).toBe(true);
-        expect(crossSolved(stateAfter(suggestion.setup, suggestion.alg), a.recon.cross)).toBe(true);
-        continue;
+  it('plays your moves for each stage from the state it started in', () => {
+    for (const s of steps) {
+      if (s.goal.kind === 'solve') {
+        expect(equalFacelets(normalized(applyMoves(solvedFacelets(), parseAlg(`${s.yours.setup} ${s.yours.alg}`))), solvedFacelets()), s.key).toBe(true);
+      } else if (s.goal.kind !== 'none') {
+        expect(reaches(s.yours, s.goal), s.key).toBe(true);
       }
-      const slot = slotsFor(a.recon.cross).find((s) => pairName(s.faces[0], s.faces[1]) === pairs[i - 1].slot)!;
-      done.add(pairs[i - 1].slot!);
-      for (const r of [yours, suggestion]) {
-        const s = stateAfter(r.setup, r.alg);
-        expect(crossSolved(s, a.recon.cross) && slotSolved(s, slot), `${r.setup} | ${r.alg}`).toBe(true);
+    }
+  });
+
+  it('only offers options that do what they say, from the same state', () => {
+    for (const s of steps) {
+      for (const g of s.groups) {
+        for (const item of g.items) expect(reaches(item, item.goal), `${s.key} ${g.title}: ${item.setup} | ${item.alg}`).toBe(true);
       }
+    }
+    expect(steps.find((s) => s.key === 'pair-1')!.groups.length).toBeGreaterThan(0);
+  });
+
+  it('renders each panel', () => {
+    const ui: StepUi = { selected: null, goTo: () => {}, play: () => {} };
+    const overview = overviewPanel(record, a, steps, ui);
+    expect(overview.querySelectorAll('.timeline .seg')).toHaveLength(6);
+    expect(overview.querySelectorAll('table.stages tbody tr')).toHaveLength(6);
+    expect(overview.querySelector('a')!.getAttribute('href')).toMatch(/^https:\/\/alg\.cubing\.net\/\?setup=/);
+    for (const s of steps.slice(1)) {
+      const panel = stepPanel(s, ui);
+      expect(panel.querySelector('.yours code')!.textContent).toBe(s.yours.alg || '—');
+      expect(panel.querySelectorAll('ul.options li').length).toBe(s.groups.reduce((n, g) => n + g.items.length, 0));
     }
   });
 });
