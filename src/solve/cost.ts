@@ -6,8 +6,10 @@ import { parseAlg, type Move } from '../cube/cube';
 export interface CostWeights {
   /** Quarter-turn cost per face or rotation. */
   quarter: Record<string, number>;
-  /** Half turns cost this multiple of the quarter turn. */
+  /** Half turns cost this multiple of the quarter turn... */
   halfFactor: number;
+  /** ...unless given here (fitted personal weights). */
+  half?: Record<string, number>;
   /** Added when a right-hand turn (R, r) directly follows a left-hand one (L, l), or vice versa. */
   sideSwitch: number;
 }
@@ -25,7 +27,7 @@ export function sideOf(base: string): number {
 
 export function moveCost(m: Move, w = DEFAULT_WEIGHTS): number {
   const q = w.quarter[m.base] ?? 2;
-  return m.amount === 2 ? q * w.halfFactor : q;
+  return m.amount === 2 ? (w.half?.[m.base] ?? q * w.halfFactor) : q;
 }
 
 export function algCost(alg: string | Move[], w = DEFAULT_WEIGHTS): number {

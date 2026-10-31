@@ -132,3 +132,21 @@ cheapest, and lists free pairs (cost ≤ 4).
 The known algorithms are the 622 F2L algorithms on [SpeedCubeDB](https://speedcubedb.com/a/3x3/F2L),
 covering all 41 cases in all four slots. Each one's slot and case are checked by running it backwards
 from solved.
+
+## History and personal costs
+
+History shows rolling stats over the last 12, last 50 and all solves:
+
+- cross moves over optimal, and the share of optimal crosses;
+- how often a colour you use had a shorter cross;
+- how often a much cheaper pair was open;
+- the look-ahead pause before each of the four pairs;
+- rotations per solve.
+
+It also lists the F2L cases where your moves cost the most over the best found, with the cheapest
+solution from the last time each came up. Per-solve summaries are cached in IndexedDB for the current
+analysis settings.
+
+**Fit from my solves** replaces the default move costs with your own: each move type's median time
+(gaps over 600 ms count as thinking) relative to a `U` or `R` quarter turn, plus the extra time a hand
+switch costs. A move type needs at least 15 samples, and moves without enough samples keep the default.

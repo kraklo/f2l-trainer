@@ -39,7 +39,10 @@ export class SettingsView implements View {
         }) }), ` ${label}`))), 'The cube sees a d as U plus a y rotation; only merge the ones you really do.'),
       row('Pause threshold (ms)', num(a.pauseThresholdMs, (v) => (a.pauseThresholdMs = v), 10), 'Gaps longer than this count as pauses.'),
       row('Front-slot penalty', num(a.frontPenalty, (v) => (a.frontPenalty = v), 0.1), 'Added to inserting into a front slot while back slots are open, to favour look-ahead.'),
-      row('Hand-switch cost', num(a.sideSwitch, (v) => (a.sideSwitch = v), 0.1), 'Added when an R turn directly follows an L turn or vice versa.'),
+      a.personalWeights
+        ? row('Move costs', h('div', null, `Yours, fitted from ${a.personalWeights.solves} solves (including the hand-switch cost). `,
+          h('button', { class: 'link', onclick: () => this.update(() => (a.personalWeights = null)) }, 'Use defaults')), 'Fit them again from History.')
+        : row('Hand-switch cost', num(a.sideSwitch, (v) => (a.sideSwitch = v), 0.1), 'Added when an R turn directly follows an L turn or vice versa. History can fit all move costs to your own speed.'),
       h('h2', null, 'Display'),
       row('Show the cube while solving', h('input', { type: 'checkbox', checked: s.liveCube, onchange: () => this.update(() => (s.liveCube = !s.liveCube)) })),
       h('div', { class: 'controls' }, h('button', { onclick: () => this.update(() => (this.app.settings = structuredClone(DEFAULT_SETTINGS))) }, 'Restore defaults')),

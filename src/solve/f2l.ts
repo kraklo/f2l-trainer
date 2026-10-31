@@ -100,7 +100,8 @@ export function searchPair(t: Tables, view: Facelets, target: Position, keep: Po
   const keptTables = kept.map((p) => pd[p]);
   const keptStart = kept.map((p) => [cornerCoord(c, SLOT_PIECES[p][0]), edgeCoord(c, SLOT_PIECES[p][1])]);
   const keptSolved = kept.map((p) => SLOT_PIECES[p][0] * 3 * N_PIECE + SLOT_PIECES[p][1] * 2);
-  const minW = Math.min(...['U', 'R', 'L', 'F', 'D', 'B'].map((f) => moveCost({ base: f, amount: 1 }, opts.weights)));
+  // cheapest single turn of any kind, so h = moves × minW never overestimates
+  const minW = Math.min(...['U', 'R', 'L', 'F', 'D', 'B'].flatMap((f) => [1, 2, 3].map((amount) => moveCost({ base: f, amount }, opts.weights))));
 
   const turnCost = [...FACES].map((f) => [1, 2, 3].map((a) => moveCost({ base: f, amount: a }, opts.weights)));
   const rotCost = ROTATIONS.map((r) => moveCost({ base: 'y', amount: r.turns }, opts.weights));
