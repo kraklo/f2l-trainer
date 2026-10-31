@@ -1,7 +1,7 @@
 // Main-thread side of the analysis worker.
 
 import { type SolveRecord } from '../record/types';
-import { type Analysis } from './analyse';
+import { DEFAULT_ANALYSIS_SETTINGS, type Analysis, type AnalysisSettings } from './analyse';
 import { type AnalysisRequest } from './worker';
 
 type Reply = { id: number; result?: Analysis | null; error?: string };
@@ -21,11 +21,11 @@ export class Analyser {
     });
   }
 
-  analyse(record: SolveRecord): Promise<Analysis | null> {
+  analyse(record: SolveRecord, settings: AnalysisSettings = DEFAULT_ANALYSIS_SETTINGS): Promise<Analysis | null> {
     const id = this.next++;
     return new Promise((resolve, reject) => {
       this.pending.set(id, { resolve, reject });
-      this.worker.postMessage({ id, record } satisfies AnalysisRequest);
+      this.worker.postMessage({ id, record, settings } satisfies AnalysisRequest);
     });
   }
 }

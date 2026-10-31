@@ -4,7 +4,25 @@ A client-only browser app that records CFOP solves from a GAN smart cube and ana
 xcross, each F2L pair and pair choice against a human-cost metric. It builds on the Bluetooth,
 cube model and rendering code from [zb-trainer](https://github.com/kraklo/zb-trainer).
 
-Work in progress. Licensed GPL-3.0-or-later.
+Licensed GPL-3.0-or-later.
+
+## Using it
+
+Open the app in Chrome or Edge (`npm run dev`, then http://localhost:5173/).
+
+1. **Connect.** Start with the cube solved and press **Connect cube**.
+2. **Solve.** Press **New scramble** and follow the moves, scrambling with white on top and green in front.
+   Inspect, then solve; the timer starts on your first turn.
+3. **Analysis.** The analysis opens when you finish.
+   - The timeline shows each stage, with the look-ahead pause before it shaded.
+   - Click a stage to see your moves replayed next to the suggestion.
+   - For the cross you also get the optimal crosses on your colour and every other colour, plus the best xcross.
+   - For each pair you get the search results and known algorithms for it, and how it ranked against the
+     other open pairs. Click a suggestion to replay it.
+4. **History.** History lists every solve, with export and import.
+5. **Settings.** Settings covers your cross colours, the slice and wide moves you use, and the cost knobs.
+
+The old capture page is still at `/spike/` for recording fixtures.
 
 ## Development
 

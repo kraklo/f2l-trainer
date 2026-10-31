@@ -29,6 +29,8 @@ export interface DecisionPoint {
   after: number;
   /** The cube as held at this point (facelet string, cross on D), which the suggestions start from. */
   state: string;
+  /** Original colour (core face id) of each held face, URFDLB. */
+  colours: number[];
   options: SlotOption[];
   chosen: { slot: string; alg: string; turns: number; cost: number; option?: SlotOption } | null;
   /** The chosen pair's best cost was more than `cheaperBy` above the cheapest pair's. */
@@ -119,6 +121,7 @@ export function analyseF2L(t: Tables, record: SolveRecord, recon: Reconstruction
     decisions.push({
       after: i,
       state: toFaceletString(v.facelets),
+      colours: v.colours,
       options,
       chosen: next.slot ? { slot: next.slot, alg, turns: next.turns, cost: algCost(alg, opts.search.weights), option } : null,
       cheaperSlot: !!option && option.best - options[0].best > opts.cheaperBy,

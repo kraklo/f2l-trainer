@@ -1,19 +1,23 @@
 // Loads the real recordings in fixtures/ for tests.
 
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { moveToString } from '../cube/cube';
 import { COLOUR_NAMES } from '../cube/pieces';
 import { type Reconstruction } from '../normalise/normalise';
 import { Recorder } from '../record/recorder';
 import { type GyroSample, type SolveFixture, type SolveRecord } from '../record/types';
 
-const SOLVES = new URL('../../fixtures/solves/', import.meta.url);
-const GYRO = new URL('../../fixtures/gyro/', import.meta.url);
+// plain paths: jsdom test environments replace the global URL class
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '../../fixtures');
+const SOLVES = join(ROOT, 'solves');
+const GYRO = join(ROOT, 'gyro');
 
 export const solveFixtureNames = readdirSync(SOLVES).filter((f) => f.endsWith('.json')).sort();
 
 export function loadSolveFixture(name: string): SolveFixture {
-  return JSON.parse(readFileSync(new URL(name, SOLVES), 'utf8')) as SolveFixture;
+  return JSON.parse(readFileSync(join(SOLVES, name), 'utf8')) as SolveFixture;
 }
 
 export interface GyroTestFixture {
@@ -24,7 +28,7 @@ export interface GyroTestFixture {
 export function loadGyroTests(): GyroTestFixture[] {
   return readdirSync(GYRO)
     .filter((f) => f.endsWith('.json'))
-    .map((f) => JSON.parse(readFileSync(new URL(f, GYRO), 'utf8')) as GyroTestFixture);
+    .map((f) => JSON.parse(readFileSync(join(GYRO, f), 'utf8')) as GyroTestFixture);
 }
 
 /**
@@ -49,7 +53,7 @@ export interface ExpectedReconstruction {
   stages: { kind: string; slot?: string; heldSlot?: string; alg: string }[];
 }
 
-const EXPECTED = new URL('../../fixtures/expected/', import.meta.url);
+const EXPECTED = join(ROOT, 'expected');
 
 export function expectedOf(r: Reconstruction): ExpectedReconstruction {
   return {
@@ -62,11 +66,11 @@ export function expectedOf(r: Reconstruction): ExpectedReconstruction {
 }
 
 export function loadExpected(name: string): ExpectedReconstruction | null {
-  const url = new URL(name, EXPECTED);
-  return existsSync(url) ? (JSON.parse(readFileSync(url, 'utf8')) as ExpectedReconstruction) : null;
+  const file = join(EXPECTED, name);
+  return existsSync(file) ? (JSON.parse(readFileSync(file, 'utf8')) as ExpectedReconstruction) : null;
 }
 
 export function writeExpected(name: string, e: ExpectedReconstruction) {
   mkdirSync(EXPECTED, { recursive: true });
-  writeFileSync(new URL(name, EXPECTED), JSON.stringify(e, null, 2) + '\n');
+  writeFileSync(join(EXPECTED, name), JSON.stringify(e, null, 2) + '\n');
 }
