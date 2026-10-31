@@ -10,6 +10,9 @@ import { Recorder } from '../src/record/recorder';
 import { exportAll, importAll, listSolves, saveSolve } from '../src/record/store';
 import { type GyroSample, type Quat, type RawMove, type SolveFixture } from '../src/record/types';
 import { CubeView } from '../src/render/cubeview';
+import { colourName } from '../src/normalise/normalise';
+import { type Analysis } from '../src/solve/analyse';
+import { Analyser } from '../src/solve/client';
 import { clear, h, toast } from '../src/ui/dom';
 
 /** Ends a solve if the cube doesn't report its final state in time. */
@@ -23,6 +26,8 @@ const recorder = new Recorder({
 let lastQuat: Quat | null = null;
 let stored = 0;
 let lastFixture: SolveFixture | null = null;
+const analyser = new Analyser();
+let analysis: Analysis | null | 'pending' = null;
 /** Free-form gyro recording for checking axis conventions and the held grip. */
 let gyroTest: { startedAt: number; gyro: GyroSample[]; moves: RawMove[] } | null = null;
 /** Labelled wide-move recording, to learn how a real d differs from U + y. */
@@ -117,6 +122,14 @@ recorder.on(() => {
     lastFixture = { record: recorder.record, events: recorder.events };
     log('checks', checkRecord(recorder.record), 'desyncs', recorder.desyncs);
     void saveSolve(recorder.record).then(refreshStored);
+    analysis = 'pending';
+    analyser.analyse(recorder.record).then(
+      (a) => {
+        analysis = a;
+        render();
+      },
+      (e) => log('analysis failed', String(e)),
+    );
   }
   render();
 });
@@ -133,6 +146,7 @@ async function newScramble() {
   }
   const scramble = (await randomScrambleForEvent('333')).toString();
   lastFixture = null;
+  analysis = null;
   view.show('');
   recorder.startScramble(scramble);
   log('scramble', scramble);
@@ -282,10 +296,31 @@ function render() {
       checksEl,
       h('div', null, `Status: ${rec.status} · gyro during solve ${gyroRate(rec).toFixed(1)} Hz · ${rec.gyro.length} samples`),
       h('ul', null, checkRecord(rec).map((r) => h('li', { class: r.ok ? 'good' : 'bad' }, `${r.ok ? '✓' : '✗'} ${r.name}`, r.detail ? ` — ${r.detail}` : ''))),
+      renderAnalysis(),
     );
   } else {
     clear(checksEl);
   }
+}
+
+function renderAnalysis() {
+  if (analysis === 'pending') return h('p', { class: 'muted' }, 'Analysing… (the first run builds solver tables)');
+  if (!analysis) return null;
+  const { recon, cross } = analysis;
+  const used = cross.used;
+  const xc = (x: Analysis['cross']['xcross']['best']) => `${colourName(x.colour)} cross + ${x.slot}, ${x.length} moves: ${x.rotation ? `(${x.rotation}) ` : ''}${x.alg}`;
+  return h('div', null,
+    h('h2', null, `Analysis (${analysis.ms.toFixed(0)} ms)`),
+    h('pre', { class: 'log' }, [
+      ...recon.segments.map((s) => `${(s.kind === 'pair' ? `pair ${s.slot} → ${s.heldSlot}` : s.kind).padEnd(26)} ${String(s.turns).padStart(2)} turns  ${(s.durationMs / 1000).toFixed(2)} s  look ${(s.recognitionMs / 1000).toFixed(2)} s`),
+      '',
+      `Cross (${colourName(used.colour)}): yours ${used.turns} turns, optimal ${used.optimal}`,
+      ...used.solutions.slice(0, 3).map((s) => `  ${s.alg}  (${s.length} moves, cost ${s.cost.toFixed(1)})`),
+      `By colour: ${cross.colours.map((c) => `${colourName(c.colour)} ${c.optimal}`).join(', ')}`,
+      `Best xcross: ${xc(cross.xcross.best)}`,
+      `Best xcross on ${colourName(used.colour)}: ${xc(cross.xcross.bestOnUsed)} (you: ${cross.crossPlusPairTurns} turns for cross + first pair)`,
+    ].join('\n')),
+  );
 }
 
 if (!navigator.bluetooth) log('Web Bluetooth is not available in this browser; use Chrome or Edge.');

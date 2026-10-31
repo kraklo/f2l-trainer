@@ -3,12 +3,15 @@
 
 import { moveToString } from '../src/cube/cube';
 import { colourName, reconstruct } from '../src/normalise/normalise';
+import { analyseCross } from '../src/solve/analyse-cross';
+import { buildTables } from '../src/solve/tables';
 import { expectedOf, loadSolveFixture, replayFixture, solveFixtureNames, writeExpected } from '../src/test/fixtures';
 
 const args = process.argv.slice(2);
 const write = args.includes('--write');
 const filter = args.find((a) => !a.startsWith('--')) ?? '';
 const s = (ms: number) => (ms / 1000).toFixed(2);
+const tables = buildTables();
 
 for (const name of solveFixtureNames.filter((n) => n.includes(filter))) {
   const record = replayFixture(loadSolveFixture(name));
@@ -25,4 +28,15 @@ for (const name of solveFixtureNames.filter((n) => n.includes(filter))) {
     const label = seg.kind === 'pair' ? `pair ${seg.slot} → ${seg.heldSlot}` : seg.kind;
     console.log(`  ${label.padEnd(26)} ${String(seg.turns).padStart(2)} turns ${s(seg.durationMs).padStart(6)}s  look ${s(seg.recognitionMs)}s  | ${alg || '(finished with previous stage)'}`);
   }
+  const t0 = performance.now();
+  const a = analyseCross(tables, record, r);
+  const ms = performance.now() - t0; // analysis only; the tables are built once above
+  const best = a.used.solutions[0];
+  console.log(`  cross analysis (${ms.toFixed(0)} ms):`);
+  console.log(`    yours: ${a.used.turns} turns, optimal ${a.used.optimal}; easiest: ${best ? `${best.alg} (${best.length}, cost ${best.cost.toFixed(1)})` : '-'}`);
+  console.log(`    by colour: ${a.colours.map((c) => `${colourName(c.colour)} ${c.optimal}`).join(', ')}`);
+  const x = a.xcross;
+  const xc = (v: typeof x.best) => `${colourName(v.colour)} ${v.slot}, ${v.length} moves: [${v.rotation}] ${v.alg}`;
+  console.log(`    best xcross: ${xc(x.best)}`);
+  console.log(`    best xcross on ${colourName(a.used.colour)}: ${xc(x.bestOnUsed)} (you: cross + first pair = ${a.crossPlusPairTurns} turns)`);
 }

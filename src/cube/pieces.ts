@@ -55,6 +55,11 @@ export function slotSolved(state: Facelets, slot: Slot): boolean {
   return pieceSolved(state, slot.corner) && pieceSolved(state, slot.edge);
 }
 
+/** A pair's name from its two side colours (face ids), in a fixed order, e.g. 'red-green'. */
+export function pairName(a: number, b: number): string {
+  return [a, b].sort((x, y) => x - y).map((f) => COLOUR_NAMES[f]).join('-');
+}
+
 export function slotName(slot: Slot): string {
-  return slot.faces.map((f) => COLOUR_NAMES[f]).join('-');
+  return pairName(slot.faces[0], slot.faces[1]);
 }

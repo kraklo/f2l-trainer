@@ -79,3 +79,18 @@ you have checked by hand as `fixtures/expected/<name>`, which the tests then hol
 - **Stages.**
   - The cross counts as done once it stays intact, apart from breaks of up to 16 moves while pairs are inserted.
   - Slots are judged at moments when the cross is intact.
+
+## Cross and xcross analysis
+
+`src/solve/` searches a cubie-level model with the cross on D. Other cross colours and slots are
+searched by viewing the cube after a whole-cube rotation.
+
+- **Cross.** The distance table covers all 190,080 states for one cross colour. Its distribution of
+  optimal lengths matches the published counts.
+- **Cross suggestions.** The analysis lists every optimal and optimal+1 cross, ranked by the human cost
+  in `solve/cost.ts`.
+- **Xcross.** The search is IDA\* with exact cross+edge and cross+corner pruning tables.
+- **Runtime.** Tables build in about 1.7 s and are cached in IndexedDB. The analysis runs in a Web
+  Worker and takes under 10 ms per solve once the tables exist.
+- **Verification.** Every reported solution is checked on the sticker model in the tests. The cubie
+  model is checked against both the sticker model and cubing.js `KPuzzle`.
