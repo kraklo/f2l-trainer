@@ -319,6 +319,15 @@ function renderAnalysis() {
       `By colour: ${cross.colours.map((c) => `${colourName(c.colour)} ${c.optimal}`).join(', ')}`,
       `Best xcross: ${xc(cross.xcross.best)}`,
       `Best xcross on ${colourName(used.colour)}: ${xc(cross.xcross.bestOnUsed)} (you: ${cross.crossPlusPairTurns} turns for cross + first pair)`,
+      ...analysis.f2l.flatMap((d) => [
+        '',
+        `After ${d.after === 0 ? 'cross' : `pair ${d.after}`}: you did ${d.chosen?.slot} — ${d.chosen?.alg} (cost ${d.chosen?.cost.toFixed(1)})${d.cheaperSlot ? '  ⚑ a cheaper pair was available' : ''}`,
+        ...d.options.flatMap((o) => [
+          `  ${o.slot === d.chosen?.slot ? '→' : ' '} ${o.slot} (${o.position}, case ${o.case ?? 'other slot'}) best ${o.best.toFixed(1)}`,
+          ...o.search.slice(0, 2).map((x) => `      ${x.cost.toFixed(1)}  ${x.alg}`),
+          ...o.known.slice(0, 2).map((x) => `      ${x.cost.toFixed(1)}  ${x.alg}  [known, ${x.votes} votes]`),
+        ]),
+      ]),
     ].join('\n')),
   );
 }

@@ -4,6 +4,7 @@
 import { moveToString } from '../src/cube/cube';
 import { colourName, reconstruct } from '../src/normalise/normalise';
 import { analyseCross } from '../src/solve/analyse-cross';
+import { analyseF2L } from '../src/solve/analyse-f2l';
 import { buildTables } from '../src/solve/tables';
 import { expectedOf, loadSolveFixture, replayFixture, solveFixtureNames, writeExpected } from '../src/test/fixtures';
 
@@ -39,4 +40,17 @@ for (const name of solveFixtureNames.filter((n) => n.includes(filter))) {
   const xc = (v: typeof x.best) => `${colourName(v.colour)} ${v.slot}, ${v.length} moves: [${v.rotation}] ${v.alg}`;
   console.log(`    best xcross: ${xc(x.best)}`);
   console.log(`    best xcross on ${colourName(a.used.colour)}: ${xc(x.bestOnUsed)} (you: cross + first pair = ${a.crossPlusPairTurns} turns)`);
+  const t1 = performance.now();
+  const f2l = analyseF2L(tables, record, r);
+  console.log(`  F2L analysis (${(performance.now() - t1).toFixed(0)} ms):`);
+  for (const d of f2l) {
+    const ch = d.chosen;
+    console.log(`    after ${d.after === 0 ? 'cross' : `pair ${d.after}`}: you did ${ch?.slot} (${ch?.turns} turns, cost ${ch?.cost.toFixed(1)}): ${ch?.alg}${d.cheaperSlot ? '  ⚑ cheaper pair available' : ''}${d.freePairs.length ? `  free: ${d.freePairs.join(', ')}` : ''}`);
+    for (const o of d.options) {
+      const mark = o.slot === ch?.slot ? '→' : ' ';
+      console.log(`     ${mark} ${o.slot.padEnd(13)} ${o.position} case ${String(o.case ?? '-').padStart(2)}  best ${o.best.toFixed(1)}`);
+      for (const s of o.search.slice(0, 3)) console.log(`          search ${s.cost.toFixed(1).padStart(4)}  ${s.alg}${s.penalty ? '  (front)' : ''}`);
+      for (const s of o.known.slice(0, 3)) console.log(`          known  ${s.cost.toFixed(1).padStart(4)}  ${s.alg}  [${s.votes} votes]`);
+    }
+  }
 }

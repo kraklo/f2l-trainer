@@ -1,0 +1,3112 @@
+[
+{
+"case": 1,
+"alg": "U R U' R'",
+"votes": 138
+},
+{
+"case": 1,
+"alg": "R' F R F'",
+"votes": 47
+},
+{
+"case": 1,
+"alg": "F' r U r'",
+"votes": 37
+},
+{
+"case": 1,
+"alg": "U L U' L'",
+"votes": 37
+},
+{
+"case": 1,
+"alg": "U f R' f'",
+"votes": 29
+},
+{
+"case": 1,
+"alg": "r' U' R U M'",
+"votes": 24
+},
+{
+"case": 1,
+"alg": "y' r' U' R U M'",
+"votes": 16
+},
+{
+"case": 1,
+"alg": "y U F' L F L2 U L",
+"votes": 11
+},
+{
+"case": 1,
+"alg": "d R U' R'",
+"votes": 10
+},
+{
+"case": 1,
+"alg": "F' L F L'",
+"votes": 7
+},
+{
+"case": 1,
+"alg": "d L U' L'",
+"votes": 7
+},
+{
+"case": 1,
+"alg": "y' U R U' R'",
+"votes": 5
+},
+{
+"case": 1,
+"alg": "y' U L U' L'",
+"votes": 5
+},
+{
+"case": 1,
+"alg": "L' f U f'",
+"votes": 2
+},
+{
+"case": 1,
+"alg": "U2 L U2 L'",
+"votes": 2
+},
+{
+"case": 1,
+"alg": "U' r U B' U' B r'",
+"votes": 0
+},
+{
+"case": 2,
+"alg": "F R' F' R",
+"votes": 63
+},
+{
+"case": 2,
+"alg": "U' L' U L",
+"votes": 29
+},
+{
+"case": 2,
+"alg": "y' U' R' U R",
+"votes": 27
+},
+{
+"case": 2,
+"alg": "U' R' U R",
+"votes": 24
+},
+{
+"case": 2,
+"alg": "U' F' U F",
+"votes": 16
+},
+{
+"case": 2,
+"alg": "l U L' U' M'",
+"votes": 16
+},
+{
+"case": 2,
+"alg": "U' f' L f",
+"votes": 15
+},
+{
+"case": 2,
+"alg": "y U' L' U L",
+"votes": 12
+},
+{
+"case": 2,
+"alg": "d' R' U R",
+"votes": 10
+},
+{
+"case": 2,
+"alg": "L F' L' F",
+"votes": 4
+},
+{
+"case": 2,
+"alg": "y' U' L' U L",
+"votes": 4
+},
+{
+"case": 2,
+"alg": "r U' r' F",
+"votes": 2
+},
+{
+"case": 2,
+"alg": "R f' U' f",
+"votes": 2
+},
+{
+"case": 2,
+"alg": "U r' U' F U F' r",
+"votes": 1
+},
+{
+"case": 2,
+"alg": "U2 R' U2 R",
+"votes": 1
+},
+{
+"case": 2,
+"alg": "U R' F' U F U' R",
+"votes": 0
+},
+{
+"case": 3,
+"alg": "F' U' F",
+"votes": 49
+},
+{
+"case": 3,
+"alg": "L' U' L",
+"votes": 29
+},
+{
+"case": 3,
+"alg": "y' R' U' R",
+"votes": 28
+},
+{
+"case": 3,
+"alg": "R' U' R",
+"votes": 23
+},
+{
+"case": 3,
+"alg": "y R' U' R",
+"votes": 18
+},
+{
+"case": 3,
+"alg": "f' L' f",
+"votes": 14
+},
+{
+"case": 3,
+"alg": "y L' U' L",
+"votes": 12
+},
+{
+"case": 3,
+"alg": "S U R U' R' S'",
+"votes": 6
+},
+{
+"case": 3,
+"alg": "U2 R' F R U R' F' R",
+"votes": 3
+},
+{
+"case": 3,
+"alg": "f' r' U z",
+"votes": 3
+},
+{
+"case": 3,
+"alg": "U' R U B' U' B R'",
+"votes": 1
+},
+{
+"case": 3,
+"alg": "y' S U R U' R' S'",
+"votes": 0
+},
+{
+"case": 3,
+"alg": "U S' F U' F' U S",
+"votes": 0
+},
+{
+"case": 3,
+"alg": "U2 r' R' F R F' r",
+"votes": 0
+},
+{
+"case": 3,
+"alg": "U S f R' f' U S'",
+"votes": 0
+},
+{
+"case": 3,
+"alg": "U f2 F' R' f' U S'",
+"votes": 0
+},
+{
+"case": 4,
+"alg": "R U R'",
+"votes": 61
+},
+{
+"case": 4,
+"alg": "L U L'",
+"votes": 21
+},
+{
+"case": 4,
+"alg": "f R f'",
+"votes": 21
+},
+{
+"case": 4,
+"alg": "F U F'",
+"votes": 16
+},
+{
+"case": 4,
+"alg": "y L U L'",
+"votes": 9
+},
+{
+"case": 4,
+"alg": "y' f R f'",
+"votes": 7
+},
+{
+"case": 4,
+"alg": "y' L U L'",
+"votes": 6
+},
+{
+"case": 4,
+"alg": "y R U R'",
+"votes": 5
+},
+{
+"case": 4,
+"alg": "y F U F'",
+"votes": 4
+},
+{
+"case": 4,
+"alg": "y2 L U L'",
+"votes": 3
+},
+{
+"case": 4,
+"alg": "S' L F' L' f",
+"votes": 2
+},
+{
+"case": 4,
+"alg": "U' M L' U L U' M'",
+"votes": 1
+},
+{
+"case": 4,
+"alg": "r B r'",
+"votes": 1
+},
+{
+"case": 4,
+"alg": "U' r R2 U R U' M",
+"votes": 1
+},
+{
+"case": 4,
+"alg": "U f R U R' U2 f' r x'",
+"votes": 0
+},
+{
+"case": 4,
+"alg": "y2 R U R'",
+"votes": 0
+},
+{
+"case": 5,
+"alg": "U' R U R' U2 R U' R'",
+"votes": 71
+},
+{
+"case": 5,
+"alg": "U R' F r U' r' F' R",
+"votes": 34
+},
+{
+"case": 5,
+"alg": "U2 F R U R' U2 F'",
+"votes": 33
+},
+{
+"case": 5,
+"alg": "F2 L' U' L U F2",
+"votes": 19
+},
+{
+"case": 5,
+"alg": "U' R' F R U R' U' F' R",
+"votes": 19
+},
+{
+"case": 5,
+"alg": "U' L U L' U2 L U' L'",
+"votes": 12
+},
+{
+"case": 5,
+"alg": "U' R U R' U' R U2 R'",
+"votes": 9
+},
+{
+"case": 5,
+"alg": "U' L U L' U' L U2 L'",
+"votes": 8
+},
+{
+"case": 5,
+"alg": "U' R U R' U R' F R F'",
+"votes": 5
+},
+{
+"case": 5,
+"alg": "R2 F' U' F U R2",
+"votes": 5
+},
+{
+"case": 5,
+"alg": "U l' U L U' L' U' l",
+"votes": 4
+},
+{
+"case": 5,
+"alg": "U r' U R U' R' U' r",
+"votes": 4
+},
+{
+"case": 5,
+"alg": "y' U' R U R' U2 R U' R'",
+"votes": 3
+},
+{
+"case": 5,
+"alg": "d' R U R' U2 R U' R'",
+"votes": 3
+},
+{
+"case": 5,
+"alg": "y2 U' R U R' U2 R U' R'",
+"votes": 0
+},
+{
+"case": 5,
+"alg": "U y' l' U L U' L' U' l",
+"votes": 0
+},
+{
+"case": 6,
+"alg": "U' r U' R' U R U r'",
+"votes": 51
+},
+{
+"case": 6,
+"alg": "y' U R' U' R U2 R' U R",
+"votes": 26
+},
+{
+"case": 6,
+"alg": "U R' U' R U2 R' U R",
+"votes": 17
+},
+{
+"case": 6,
+"alg": "d R' U' R U2 R' U R",
+"votes": 14
+},
+{
+"case": 6,
+"alg": "U r U' r' U' L U F L'",
+"votes": 10
+},
+{
+"case": 6,
+"alg": "y U R' U' R U R' U2 R",
+"votes": 7
+},
+{
+"case": 6,
+"alg": "y U L' U' L U2 L' U L",
+"votes": 6
+},
+{
+"case": 6,
+"alg": "U L' U' L U2 L' U L",
+"votes": 6
+},
+{
+"case": 6,
+"alg": "U' l U' L' U L U l'",
+"votes": 5
+},
+{
+"case": 6,
+"alg": "U L F' L' U' L U F L'",
+"votes": 3
+},
+{
+"case": 6,
+"alg": "F2 R U R' U' F2",
+"votes": 2
+},
+{
+"case": 6,
+"alg": "R' F2 R U R' U' F2 U R",
+"votes": 1
+},
+{
+"case": 6,
+"alg": "U L' U' L U L' U2 L",
+"votes": 1
+},
+{
+"case": 6,
+"alg": "U2 R' F' U' F U2 R",
+"votes": 0
+},
+{
+"case": 6,
+"alg": "y2 U L' U' L U2 L' U L",
+"votes": 0
+},
+{
+"case": 6,
+"alg": "U' y r U' R' U R U r'",
+"votes": 0
+},
+{
+"case": 7,
+"alg": "U' R U2 R' U' R U2 R'",
+"votes": 36
+},
+{
+"case": 7,
+"alg": "M' U' M U2 r U' r'",
+"votes": 29
+},
+{
+"case": 7,
+"alg": "F U R U2 R' U F'",
+"votes": 20
+},
+{
+"case": 7,
+"alg": "U' R U2 R' U2 R U' R'",
+"votes": 13
+},
+{
+"case": 7,
+"alg": "U' L U2 L' U2 L U' L'",
+"votes": 13
+},
+{
+"case": 7,
+"alg": "r U2 R2 U' R2 U' r'",
+"votes": 13
+},
+{
+"case": 7,
+"alg": "U' L U2 L' U' L U2 L'",
+"votes": 6
+},
+{
+"case": 7,
+"alg": "U' R U2 R' U R' F R F'",
+"votes": 5
+},
+{
+"case": 7,
+"alg": "d' L U2 L' U2 L U' L'",
+"votes": 5
+},
+{
+"case": 7,
+"alg": "U' F U2 R U' R' U F'",
+"votes": 3
+},
+{
+"case": 7,
+"alg": "F R U R2 U' R F'",
+"votes": 3
+},
+{
+"case": 7,
+"alg": "l U2 L2 U' L2 U' l'",
+"votes": 2
+},
+{
+"case": 7,
+"alg": "M U' M' U2 l U' l'",
+"votes": 2
+},
+{
+"case": 7,
+"alg": "y' U' L U2 L' U2 L U' L'",
+"votes": 2
+},
+{
+"case": 7,
+"alg": "y U' R U2 R' U2 R U' R'",
+"votes": 1
+},
+{
+"case": 8,
+"alg": "r' U2 R2 U R2 U r",
+"votes": 38
+},
+{
+"case": 8,
+"alg": "d R' U2 R U R' U2 R",
+"votes": 34
+},
+{
+"case": 8,
+"alg": "y' U R' U2 R U2 R' U R",
+"votes": 12
+},
+{
+"case": 8,
+"alg": "y U L' U2 L U2 L' U L",
+"votes": 11
+},
+{
+"case": 8,
+"alg": "l' U2 L2 U L2 U l",
+"votes": 11
+},
+{
+"case": 8,
+"alg": "U L' U2 L U L' U2 L",
+"votes": 6
+},
+{
+"case": 8,
+"alg": "U R' U2 R U R' U2 R",
+"votes": 4
+},
+{
+"case": 8,
+"alg": "y U R' U2 R U R' U2 R",
+"votes": 3
+},
+{
+"case": 8,
+"alg": "U r' F2 r U2 r' F r",
+"votes": 2
+},
+{
+"case": 8,
+"alg": "d L' U2 L U2 L' U L",
+"votes": 2
+},
+{
+"case": 8,
+"alg": "U R' U2 R U2 R' U R",
+"votes": 2
+},
+{
+"case": 8,
+"alg": "U' R' U2 R U R' U R U2 L' U L",
+"votes": 1
+},
+{
+"case": 8,
+"alg": "U L' U2 L U' L F' L' F",
+"votes": 0
+},
+{
+"case": 8,
+"alg": "f' L' U' L2 U L' f",
+"votes": 0
+},
+{
+"case": 9,
+"alg": "U' R U' R' U F' U' F",
+"votes": 40
+},
+{
+"case": 9,
+"alg": "F R U R' U' F' R U' R'",
+"votes": 15
+},
+{
+"case": 9,
+"alg": "U L' U' L U' L' U' L",
+"votes": 13
+},
+{
+"case": 9,
+"alg": "y U R' U' R U' R' U' R",
+"votes": 12
+},
+{
+"case": 9,
+"alg": "U R' U' R U' R' U' R",
+"votes": 11
+},
+{
+"case": 9,
+"alg": "U' R U' R' d R' U' R",
+"votes": 10
+},
+{
+"case": 9,
+"alg": "d R' U' R U' R' U' R",
+"votes": 8
+},
+{
+"case": 9,
+"alg": "U' L U' L' U f' L' f",
+"votes": 4
+},
+{
+"case": 9,
+"alg": "d L' U' L U' L' U' L",
+"votes": 2
+},
+{
+"case": 9,
+"alg": "y U2 R' U R U R' U' R",
+"votes": 2
+},
+{
+"case": 9,
+"alg": "F2 U R U' R' F2",
+"votes": 1
+},
+{
+"case": 9,
+"alg": "U' F U' F' U L' U' L",
+"votes": 1
+},
+{
+"case": 9,
+"alg": "L' U L U' L' U' L U2 L' U L",
+"votes": 0
+},
+{
+"case": 9,
+"alg": "R' U R U' R' U' R U2 R' U R",
+"votes": 0
+},
+{
+"case": 9,
+"alg": "U2 R' U R U R' U' R",
+"votes": 0
+},
+{
+"case": 9,
+"alg": "U2 r U R' U R' U' R2 U' r'",
+"votes": 0
+},
+{
+"case": 10,
+"alg": "U' R U R' U R U R'",
+"votes": 40
+},
+{
+"case": 10,
+"alg": "U2 R U' R' U' R U R'",
+"votes": 14
+},
+{
+"case": 10,
+"alg": "U' L U L' U L U L'",
+"votes": 13
+},
+{
+"case": 10,
+"alg": "U L' U L U' F U F'",
+"votes": 9
+},
+{
+"case": 10,
+"alg": "F U' R U R' U2 F'",
+"votes": 7
+},
+{
+"case": 10,
+"alg": "U R' U R U' f R f'",
+"votes": 6
+},
+{
+"case": 10,
+"alg": "d R' U R d' R U R'",
+"votes": 3
+},
+{
+"case": 10,
+"alg": "d' L U L' U L U L'",
+"votes": 3
+},
+{
+"case": 10,
+"alg": "R2 U' F' U F R2",
+"votes": 3
+},
+{
+"case": 10,
+"alg": "y' U R' U R U' f R f'",
+"votes": 2
+},
+{
+"case": 10,
+"alg": "y' U' R U R' U R U R'",
+"votes": 2
+},
+{
+"case": 10,
+"alg": "y U' R U R' U R U R'",
+"votes": 2
+},
+{
+"case": 10,
+"alg": "d' R U R' U R U R'",
+"votes": 2
+},
+{
+"case": 10,
+"alg": "U2 L U' L' U' L U L'",
+"votes": 1
+},
+{
+"case": 10,
+"alg": "L U' L' U L U L' U2 L U' L'",
+"votes": 0
+},
+{
+"case": 10,
+"alg": "y2 U' R U R' U R U R'",
+"votes": 0
+},
+{
+"case": 11,
+"alg": "U' R U2 R' U F' U' F",
+"votes": 44
+},
+{
+"case": 11,
+"alg": "y' R U2 R2 U' R2 U' R'",
+"votes": 39
+},
+{
+"case": 11,
+"alg": "L' U L U' L' U L U2 L' U L",
+"votes": 16
+},
+{
+"case": 11,
+"alg": "U' R U2 R' d R' U' R",
+"votes": 10
+},
+{
+"case": 11,
+"alg": "F' U L' U2 L U2 F",
+"votes": 9
+},
+{
+"case": 11,
+"alg": "L U2 L2 U' L2 U' L'",
+"votes": 9
+},
+{
+"case": 11,
+"alg": "U' L U2 L' U f' L' f",
+"votes": 8
+},
+{
+"case": 11,
+"alg": "R U2 R2 U' R2 U' R'",
+"votes": 7
+},
+{
+"case": 11,
+"alg": "R' U R U' R' U R U2 R' U R",
+"votes": 6
+},
+{
+"case": 11,
+"alg": "U' L U2 L' d L' U' L",
+"votes": 3
+},
+{
+"case": 11,
+"alg": "F U R U' R' U R U' R' U F'",
+"votes": 2
+},
+{
+"case": 11,
+"alg": "L U2 L' U' l U' l' U2 l U l'",
+"votes": 2
+},
+{
+"case": 11,
+"alg": "y R U2 R2 U' R2 U' R'",
+"votes": 2
+},
+{
+"case": 11,
+"alg": "U' F U2 F' U r' F' r",
+"votes": 1
+},
+{
+"case": 11,
+"alg": "R' U R U' R' U R U R' U2 R",
+"votes": 1
+},
+{
+"case": 11,
+"alg": "d' R U2 R' U F' U' F",
+"votes": 0
+},
+{
+"case": 12,
+"alg": "R U' R' U R U' R' U2 R U' R'",
+"votes": 36
+},
+{
+"case": 12,
+"alg": "R' U2 R2 U R2 U R",
+"votes": 27
+},
+{
+"case": 12,
+"alg": "U R' U2 R U' f R f'",
+"votes": 9
+},
+{
+"case": 12,
+"alg": "U L' U2 L U' F U F'",
+"votes": 8
+},
+{
+"case": 12,
+"alg": "U F' U2 F U' R U R'",
+"votes": 6
+},
+{
+"case": 12,
+"alg": "U R U' R' U' R U R' U' R U R'",
+"votes": 5
+},
+{
+"case": 12,
+"alg": "L' U2 L2 U L2 U L",
+"votes": 5
+},
+{
+"case": 12,
+"alg": "U L' U2 L d' L U L'",
+"votes": 3
+},
+{
+"case": 12,
+"alg": "f R' U R2 U' R2 f'",
+"votes": 2
+},
+{
+"case": 12,
+"alg": "L' U2 L U l' U l U2 l' U' l",
+"votes": 1
+},
+{
+"case": 12,
+"alg": "y' R' U2 R2 U R2 U R",
+"votes": 1
+},
+{
+"case": 12,
+"alg": "d L' U2 L U' F U F'",
+"votes": 1
+},
+{
+"case": 12,
+"alg": "U2 R' U2 R U2 L U L' U2 R' U R",
+"votes": 1
+},
+{
+"case": 12,
+"alg": "U R' U2 R M U2 R' U R U M'",
+"votes": 1
+},
+{
+"case": 12,
+"alg": "U R' U2 R d' R U R'",
+"votes": 1
+},
+{
+"case": 12,
+"alg": "L U' L' U L U' L' U2 L U' L'",
+"votes": 0
+},
+{
+"case": 13,
+"alg": "y' U R' U R U' R' U' R",
+"votes": 41
+},
+{
+"case": 13,
+"alg": "U R' U R U' R' U' R",
+"votes": 18
+},
+{
+"case": 13,
+"alg": "U L' U L U' L' U' L",
+"votes": 17
+},
+{
+"case": 13,
+"alg": "M' U' R U R' U2 R U' r'",
+"votes": 16
+},
+{
+"case": 13,
+"alg": "R U' R' U R' F R F' R U' R'",
+"votes": 12
+},
+{
+"case": 13,
+"alg": "d R' U R U' R' U' R",
+"votes": 12
+},
+{
+"case": 13,
+"alg": "d L' U L U' L' U' L",
+"votes": 7
+},
+{
+"case": 13,
+"alg": "y U R' U R U' R' U' R",
+"votes": 6
+},
+{
+"case": 13,
+"alg": "U f' L f U' f' L' f",
+"votes": 4
+},
+{
+"case": 13,
+"alg": "y' R U' R' U2 R U' R' U F' U F",
+"votes": 1
+},
+{
+"case": 13,
+"alg": "U L' U L U' L' U L U L' U L",
+"votes": 1
+},
+{
+"case": 13,
+"alg": "U L U' L F' L2 U' L U F U L'",
+"votes": 1
+},
+{
+"case": 13,
+"alg": "U R' U R U' R' U R U R' U R",
+"votes": 1
+},
+{
+"case": 13,
+"alg": "U L F' L2 U' L U L F L'",
+"votes": 0
+},
+{
+"case": 14,
+"alg": "U' R U' R' U R U R'",
+"votes": 47
+},
+{
+"case": 14,
+"alg": "U' L U' L' U L U L'",
+"votes": 14
+},
+{
+"case": 14,
+"alg": "d' L U' L' U L U L'",
+"votes": 7
+},
+{
+"case": 14,
+"alg": "y U' R U' R' U R U R'",
+"votes": 7
+},
+{
+"case": 14,
+"alg": "y U' L U' L' U L U L'",
+"votes": 5
+},
+{
+"case": 14,
+"alg": "y' U' R U' R' U R U R'",
+"votes": 5
+},
+{
+"case": 14,
+"alg": "d' R U' R' U R U R'",
+"votes": 5
+},
+{
+"case": 14,
+"alg": "R U2 R' U2 R U R' U2 R U' R'",
+"votes": 4
+},
+{
+"case": 14,
+"alg": "M' U L' U' L U2 L' U l",
+"votes": 4
+},
+{
+"case": 14,
+"alg": "U' f R' f' U f R f'",
+"votes": 3
+},
+{
+"case": 14,
+"alg": "y' U' L U' L' U L U L'",
+"votes": 2
+},
+{
+"case": 14,
+"alg": "U' R2 D R' U R D' R2",
+"votes": 1
+},
+{
+"case": 14,
+"alg": "U2 R2 U R' U R U2 R2",
+"votes": 1
+},
+{
+"case": 14,
+"alg": "U' L U' L' U L U' L' U' L U' L'",
+"votes": 1
+},
+{
+"case": 15,
+"alg": "M U r U' r' U' M'",
+"votes": 41
+},
+{
+"case": 15,
+"alg": "R U R' U2 R U' R' U R U' R'",
+"votes": 37
+},
+{
+"case": 15,
+"alg": "R' D' R U' R' D R U R U' R'",
+"votes": 37
+},
+{
+"case": 15,
+"alg": "F' U F U2 R U R'",
+"votes": 20
+},
+{
+"case": 15,
+"alg": "R' U R U2 f R f'",
+"votes": 12
+},
+{
+"case": 15,
+"alg": "L U L' U2 L U' L' U L U' L'",
+"votes": 11
+},
+{
+"case": 15,
+"alg": "F U2 R U R' U F'",
+"votes": 9
+},
+{
+"case": 15,
+"alg": "L' U L U2 F U F'",
+"votes": 9
+},
+{
+"case": 15,
+"alg": "M' U l U' l' U' M",
+"votes": 6
+},
+{
+"case": 15,
+"alg": "f' L f U2 L U L'",
+"votes": 5
+},
+{
+"case": 15,
+"alg": "L U2 L' U L U L' U L U' L'",
+"votes": 5
+},
+{
+"case": 15,
+"alg": "R2 F R F' R U R' U2 R",
+"votes": 5
+},
+{
+"case": 15,
+"alg": "L' U L U2 y L U L'",
+"votes": 4
+},
+{
+"case": 15,
+"alg": "R' U R U' d' R U R'",
+"votes": 3
+},
+{
+"case": 15,
+"alg": "R2 F R F' R U2 R' U R",
+"votes": 2
+},
+{
+"case": 15,
+"alg": "U L' l U' l' U l U l' U L",
+"votes": 1
+},
+{
+"case": 16,
+"alg": "R U' R' U2 F' U' F",
+"votes": 35
+},
+{
+"case": 16,
+"alg": "R U' R' U2 y' R' U' R",
+"votes": 12
+},
+{
+"case": 16,
+"alg": "L U' L' U2 f' L' f",
+"votes": 11
+},
+{
+"case": 16,
+"alg": "F U' R U' R' U2 F'",
+"votes": 10
+},
+{
+"case": 16,
+"alg": "R' U' R U2 R' U R U' R' U R",
+"votes": 10
+},
+{
+"case": 16,
+"alg": "U M' U R U' r' U' R U R'",
+"votes": 6
+},
+{
+"case": 16,
+"alg": "M' U' r' U r U M",
+"votes": 6
+},
+{
+"case": 16,
+"alg": "U F U R U' R' F' R U R'",
+"votes": 4
+},
+{
+"case": 16,
+"alg": "L' U' L U2 L' U L U' L' U L",
+"votes": 4
+},
+{
+"case": 16,
+"alg": "L' U2 L U' L' U' L U' L' U L",
+"votes": 4
+},
+{
+"case": 16,
+"alg": "L2 F' L' F L' U2 L U' L'",
+"votes": 4
+},
+{
+"case": 16,
+"alg": "U2 R' U' R U R D R' U' R D' R'",
+"votes": 4
+},
+{
+"case": 16,
+"alg": "M U' l' U l U M'",
+"votes": 3
+},
+{
+"case": 16,
+"alg": "L U' L' y U2 R' U' R",
+"votes": 3
+},
+{
+"case": 16,
+"alg": "F R' F' R U2 R' U' R2 U' R'",
+"votes": 3
+},
+{
+"case": 16,
+"alg": "L U' L' U' d' R' U' R",
+"votes": 1
+},
+{
+"case": 17,
+"alg": "R U2 R' U' R U R'",
+"votes": 43
+},
+{
+"case": 17,
+"alg": "L U2 L' U' L U L'",
+"votes": 10
+},
+{
+"case": 17,
+"alg": "L F' L' F L' U L U' L' U L",
+"votes": 6
+},
+{
+"case": 17,
+"alg": "y L U2 L' U' L U L'",
+"votes": 5
+},
+{
+"case": 17,
+"alg": "R' U2 F R U R' U' F' R",
+"votes": 5
+},
+{
+"case": 17,
+"alg": "y' L U2 L' U' L U L'",
+"votes": 4
+},
+{
+"case": 17,
+"alg": "L' U2 L U2 l' U L U' L' U' l",
+"votes": 3
+},
+{
+"case": 17,
+"alg": "y R U2 R' U' R U R'",
+"votes": 3
+},
+{
+"case": 17,
+"alg": "y2 L U2 L' U' L U L'",
+"votes": 2
+},
+{
+"case": 17,
+"alg": "R U R' U' R U2 R' U2 R U R'",
+"votes": 1
+},
+{
+"case": 17,
+"alg": "y' R U2 R' U' R U R'",
+"votes": 1
+},
+{
+"case": 17,
+"alg": "L U L' U' L U2 L' U2 L U L'",
+"votes": 1
+},
+{
+"case": 17,
+"alg": "l U' R' U l' U R U' R' U R",
+"votes": 1
+},
+{
+"case": 17,
+"alg": "y L F' L' F L' U L U' L' U L",
+"votes": 0
+},
+{
+"case": 18,
+"alg": "y' R' U2 R U R' U' R",
+"votes": 27
+},
+{
+"case": 18,
+"alg": "y L' U2 L U L' U' L",
+"votes": 14
+},
+{
+"case": 18,
+"alg": "F' U2 F U F' U' F",
+"votes": 9
+},
+{
+"case": 18,
+"alg": "y R' U2 R U R' U' R",
+"votes": 8
+},
+{
+"case": 18,
+"alg": "L' U2 L U L' U' L",
+"votes": 7
+},
+{
+"case": 18,
+"alg": "U F U R U' R' F' L U L'",
+"votes": 7
+},
+{
+"case": 18,
+"alg": "R' U2 R U R' U' R",
+"votes": 6
+},
+{
+"case": 18,
+"alg": "R' F R F' R U' R' U R U' R'",
+"votes": 4
+},
+{
+"case": 18,
+"alg": "L U2 F' L' U' L U F L'",
+"votes": 3
+},
+{
+"case": 18,
+"alg": "L U2 L' U2 l U' L' U L U l'",
+"votes": 2
+},
+{
+"case": 19,
+"alg": "U R U2 R' U R U' R'",
+"votes": 37
+},
+{
+"case": 19,
+"alg": "U L U2 L' U L U' L'",
+"votes": 13
+},
+{
+"case": 19,
+"alg": "y U R U2 R' U R U' R'",
+"votes": 12
+},
+{
+"case": 19,
+"alg": "U L' U L2 F' L' F L' U L",
+"votes": 7
+},
+{
+"case": 19,
+"alg": "U R' F' U2 F R U R' U' R",
+"votes": 7
+},
+{
+"case": 19,
+"alg": "U R U2 R2 F R F'",
+"votes": 3
+},
+{
+"case": 19,
+"alg": "d L U2 L' U L U' L'",
+"votes": 3
+},
+{
+"case": 19,
+"alg": "U2 f R2 U R2 U' R f'",
+"votes": 3
+},
+{
+"case": 19,
+"alg": "d f R2 f' U f R' f'",
+"votes": 2
+},
+{
+"case": 19,
+"alg": "R U' R' U R U' R' U R U R'",
+"votes": 2
+},
+{
+"case": 19,
+"alg": "d R U2 R' U R U' R'",
+"votes": 2
+},
+{
+"case": 19,
+"alg": "y' U R U2 R' U R U' R'",
+"votes": 2
+},
+{
+"case": 19,
+"alg": "y U L U2 L' U L U' L'",
+"votes": 2
+},
+{
+"case": 19,
+"alg": "L U' L' U L U' L' U L U L'",
+"votes": 1
+},
+{
+"case": 20,
+"alg": "y' U' R' U2 R U' R' U R",
+"votes": 32
+},
+{
+"case": 20,
+"alg": "U' R U' R2 F R F' R U' R'",
+"votes": 20
+},
+{
+"case": 20,
+"alg": "U' L' U2 L U' L' U L",
+"votes": 12
+},
+{
+"case": 20,
+"alg": "y U' L' U2 L U' L' U L",
+"votes": 8
+},
+{
+"case": 20,
+"alg": "U' R' U2 R U' R' U R",
+"votes": 8
+},
+{
+"case": 20,
+"alg": "y U' R' U2 R U' R' U R",
+"votes": 6
+},
+{
+"case": 20,
+"alg": "U' F' U2 F U' F' U F",
+"votes": 5
+},
+{
+"case": 20,
+"alg": "U' L F U2 F' L' U' L U L'",
+"votes": 4
+},
+{
+"case": 20,
+"alg": "d' R' U2 R U' R' U R",
+"votes": 2
+},
+{
+"case": 20,
+"alg": "U' L U L' U l U' l' U2 l U l'",
+"votes": 2
+},
+{
+"case": 20,
+"alg": "L' U L U' L' U L U' L' U' L",
+"votes": 1
+},
+{
+"case": 20,
+"alg": "R' U R U' R' U R U' R' U' R",
+"votes": 1
+},
+{
+"case": 20,
+"alg": "U' L' U2 L2 F' L' F",
+"votes": 0
+},
+{
+"case": 21,
+"alg": "U2 R U R' U R U' R'",
+"votes": 27
+},
+{
+"case": 21,
+"alg": "R U' R' U2 R U R'",
+"votes": 15
+},
+{
+"case": 21,
+"alg": "r' U r U2 r' U' r",
+"votes": 9
+},
+{
+"case": 21,
+"alg": "F R U2 R' F'",
+"votes": 8
+},
+{
+"case": 21,
+"alg": "R B U2 B' R'",
+"votes": 6
+},
+{
+"case": 21,
+"alg": "l' U l U2 l' U' l",
+"votes": 6
+},
+{
+"case": 21,
+"alg": "L U' L' U2 L U L'",
+"votes": 6
+},
+{
+"case": 21,
+"alg": "U2 L U L' U L U' L'",
+"votes": 6
+},
+{
+"case": 21,
+"alg": "y' f R' f' U2 f R f'",
+"votes": 2
+},
+{
+"case": 21,
+"alg": "y U2 L U L' U L U' L'",
+"votes": 2
+},
+{
+"case": 21,
+"alg": "y' U2 L U L' U L U' L'",
+"votes": 2
+},
+{
+"case": 21,
+"alg": "y L U' L' U2 L U L'",
+"votes": 1
+},
+{
+"case": 21,
+"alg": "l U' L' U2 L U l'",
+"votes": 1
+},
+{
+"case": 21,
+"alg": "L F U2 F' L'",
+"votes": 1
+},
+{
+"case": 21,
+"alg": "U2 R' U' R S R f' U' F",
+"votes": 1
+},
+{
+"case": 21,
+"alg": "U f U R U' R f'",
+"votes": 1
+},
+{
+"case": 22,
+"alg": "r U' r' U2 r U r'",
+"votes": 28
+},
+{
+"case": 22,
+"alg": "F' L' U2 L F",
+"votes": 22
+},
+{
+"case": 22,
+"alg": "y' U2 R' U' R U' R' U R",
+"votes": 17
+},
+{
+"case": 22,
+"alg": "l U' l' U2 l U l'",
+"votes": 9
+},
+{
+"case": 22,
+"alg": "R' U R U2 R' U' R",
+"votes": 7
+},
+{
+"case": 22,
+"alg": "U2 R' U' R U' R' U R",
+"votes": 7
+},
+{
+"case": 22,
+"alg": "L' U L U2 L' U' L",
+"votes": 6
+},
+{
+"case": 22,
+"alg": "y U2 L' U' L U' L' U L",
+"votes": 5
+},
+{
+"case": 22,
+"alg": "U2 L' U' L U' L' U L",
+"votes": 3
+},
+{
+"case": 22,
+"alg": "f' U' L2 U f",
+"votes": 2
+},
+{
+"case": 22,
+"alg": "r' U' F2 U r",
+"votes": 1
+},
+{
+"case": 22,
+"alg": "U' L' U L U2 L' U L U' L' U L",
+"votes": 1
+},
+{
+"case": 22,
+"alg": "y R' U R U2 R' U' R",
+"votes": 1
+},
+{
+"case": 22,
+"alg": "y U2 R' U' R U' R' U R",
+"votes": 1
+},
+{
+"case": 22,
+"alg": "R' F' U2 F R",
+"votes": 1
+},
+{
+"case": 22,
+"alg": "U' R' U R U2 R' U R U' R' U R",
+"votes": 1
+},
+{
+"case": 23,
+"alg": "U R U' R' U' R U' R' U R U' R'",
+"votes": 33
+},
+{
+"case": 23,
+"alg": "R U R' U2 R U R' U' R U R'",
+"votes": 17
+},
+{
+"case": 23,
+"alg": "F' U' L' U L F L' U L",
+"votes": 14
+},
+{
+"case": 23,
+"alg": "U L U' L' U' L U' L' U L U' L'",
+"votes": 12
+},
+{
+"case": 23,
+"alg": "U R' F R' F' R2 U' R' U R",
+"votes": 11
+},
+{
+"case": 23,
+"alg": "U2 R2 U2 R' U' R U' R2",
+"votes": 10
+},
+{
+"case": 23,
+"alg": "U L' U' L2 F' L' F L' U L",
+"votes": 8
+},
+{
+"case": 23,
+"alg": "L U L' U2 L U L' U' L U L'",
+"votes": 8
+},
+{
+"case": 23,
+"alg": "R U' R2 D' R U2 R' D R",
+"votes": 7
+},
+{
+"case": 23,
+"alg": "F U' R U R' U R U2 R' F'",
+"votes": 6
+},
+{
+"case": 23,
+"alg": "U2 l' U' L U' L' U2 B' l",
+"votes": 5
+},
+{
+"case": 23,
+"alg": "U' F R U' R' F' L' U' L",
+"votes": 4
+},
+{
+"case": 23,
+"alg": "R' F' U' F U2 R U' R' U' R",
+"votes": 4
+},
+{
+"case": 23,
+"alg": "L' U' L U' L' U2 L2 U2 L'",
+"votes": 3
+},
+{
+"case": 23,
+"alg": "U2 L2 U2 L' U' L U' L2",
+"votes": 3
+},
+{
+"case": 23,
+"alg": "U R' U' F' U F R U' R' U R",
+"votes": 3
+},
+{
+"case": 24,
+"alg": "F U R U' R' F' R U' R'",
+"votes": 37
+},
+{
+"case": 24,
+"alg": "U2 r U R' U R U2 B r'",
+"votes": 11
+},
+{
+"case": 24,
+"alg": "R' U' R U2 R' U' R U R' U' R",
+"votes": 10
+},
+{
+"case": 24,
+"alg": "U' L' U L U L' U L U' L' U L",
+"votes": 9
+},
+{
+"case": 24,
+"alg": "U' R U R2 F R F' R U' R'",
+"votes": 7
+},
+{
+"case": 24,
+"alg": "y' R' U' R U2 R' U' R U R' U' R",
+"votes": 6
+},
+{
+"case": 24,
+"alg": "U' F' r U r' U' L' U' L",
+"votes": 5
+},
+{
+"case": 24,
+"alg": "U F' L' U L F R U R'",
+"votes": 4
+},
+{
+"case": 24,
+"alg": "L' U L U L' U' L U2 L' U' L",
+"votes": 4
+},
+{
+"case": 24,
+"alg": "U2 R2 U2 R U R' U R2",
+"votes": 4
+},
+{
+"case": 24,
+"alg": "R U R' U R U2 R2 U2 R",
+"votes": 3
+},
+{
+"case": 24,
+"alg": "U' R' U R U R' U R U' R' U R",
+"votes": 3
+},
+{
+"case": 24,
+"alg": "F U' R U2 R' U R U2 R' F'",
+"votes": 2
+},
+{
+"case": 24,
+"alg": "U' L F' L F L2 U L U' L'",
+"votes": 2
+},
+{
+"case": 24,
+"alg": "U2 F U R U' R' F' U2 L U' L'",
+"votes": 1
+},
+{
+"case": 24,
+"alg": "y U' R' U R U R' U R U' R' U R",
+"votes": 1
+},
+{
+"case": 25,
+"alg": "U' R' F R F' R U R'",
+"votes": 33
+},
+{
+"case": 25,
+"alg": "R' F' R U R U' R' F",
+"votes": 14
+},
+{
+"case": 25,
+"alg": "U' F' U F U R U' R'",
+"votes": 13
+},
+{
+"case": 25,
+"alg": "U' L' U L F' r U r'",
+"votes": 11
+},
+{
+"case": 25,
+"alg": "R D' R' U' R D R' L U L'",
+"votes": 11
+},
+{
+"case": 25,
+"alg": "L U' L' U' L U' L' U L U L'",
+"votes": 10
+},
+{
+"case": 25,
+"alg": "U' R' U M U' R U M'",
+"votes": 7
+},
+{
+"case": 25,
+"alg": "U' f' L' f U L U L'",
+"votes": 5
+},
+{
+"case": 25,
+"alg": "R' S' R U' R' S R",
+"votes": 5
+},
+{
+"case": 25,
+"alg": "l' U' l U l F' l' F",
+"votes": 4
+},
+{
+"case": 25,
+"alg": "U' R' U R r' U' R U M'",
+"votes": 4
+},
+{
+"case": 25,
+"alg": "U' L' U L d R U' R'",
+"votes": 3
+},
+{
+"case": 25,
+"alg": "U' L' U L F' L F L'",
+"votes": 3
+},
+{
+"case": 25,
+"alg": "U' L' U L y U L U' L'",
+"votes": 1
+},
+{
+"case": 25,
+"alg": "L' U' L' U' L' U L U L",
+"votes": 1
+},
+{
+"case": 25,
+"alg": "d' R' F R F' R U R'",
+"votes": 1
+},
+{
+"case": 26,
+"alg": "U R U' R' F R' F' R",
+"votes": 24
+},
+{
+"case": 26,
+"alg": "r U r' U' r' F r F'",
+"votes": 16
+},
+{
+"case": 26,
+"alg": "R S' R' U R S R'",
+"votes": 13
+},
+{
+"case": 26,
+"alg": "U f R f' U' R' U' R",
+"votes": 12
+},
+{
+"case": 26,
+"alg": "R' U R U R' U R U' R' U' R",
+"votes": 9
+},
+{
+"case": 26,
+"alg": "R U R U R U' R' U' R'",
+"votes": 7
+},
+{
+"case": 26,
+"alg": "U R U R' U' y L' U' L",
+"votes": 6
+},
+{
+"case": 26,
+"alg": "U L F' L' F L' U' L",
+"votes": 6
+},
+{
+"case": 26,
+"alg": "L S L' U L S' L'",
+"votes": 5
+},
+{
+"case": 26,
+"alg": "U R U' R' U' F' U F",
+"votes": 4
+},
+{
+"case": 26,
+"alg": "U F L' U' L U L F' L'",
+"votes": 3
+},
+{
+"case": 26,
+"alg": "F R2 u R u' R2 F'",
+"votes": 3
+},
+{
+"case": 26,
+"alg": "U' R u R' U R U' u' R'",
+"votes": 3
+},
+{
+"case": 26,
+"alg": "R E' R' U R E R'",
+"votes": 3
+},
+{
+"case": 26,
+"alg": "U' R S2 R' U' R S2 R'",
+"votes": 3
+},
+{
+"case": 26,
+"alg": "U F r' F' r U r U' r'",
+"votes": 2
+},
+{
+"case": 27,
+"alg": "R U' R' U R U' R'",
+"votes": 33
+},
+{
+"case": 27,
+"alg": "L U' L' U L U' L'",
+"votes": 9
+},
+{
+"case": 27,
+"alg": "L' U' L U F' r U r'",
+"votes": 7
+},
+{
+"case": 27,
+"alg": "R' U2 R' F R F' R",
+"votes": 7
+},
+{
+"case": 27,
+"alg": "L' U' L U F' L F L'",
+"votes": 4
+},
+{
+"case": 27,
+"alg": "R' U' R U r' U' R U M'",
+"votes": 4
+},
+{
+"case": 27,
+"alg": "F' U' F U2 R U' R'",
+"votes": 3
+},
+{
+"case": 27,
+"alg": "y' R U' R' U R U' R'",
+"votes": 2
+},
+{
+"case": 27,
+"alg": "y R U' R' U R U' R'",
+"votes": 2
+},
+{
+"case": 27,
+"alg": "R' U' R U f' U f R'",
+"votes": 2
+},
+{
+"case": 27,
+"alg": "y' f R' f' U f R' f'",
+"votes": 1
+},
+{
+"case": 27,
+"alg": "y' f R' f' r' U' R U M'",
+"votes": 1
+},
+{
+"case": 27,
+"alg": "U' F R U2 R' U F'",
+"votes": 1
+},
+{
+"case": 28,
+"alg": "R U R' U' F R' F' R",
+"votes": 24
+},
+{
+"case": 28,
+"alg": "y L' U L U' L' U L",
+"votes": 12
+},
+{
+"case": 28,
+"alg": "L' U L U' L' U L",
+"votes": 11
+},
+{
+"case": 28,
+"alg": "R' U R U' R' U R",
+"votes": 8
+},
+{
+"case": 28,
+"alg": "F' U F U' F' U F",
+"votes": 6
+},
+{
+"case": 28,
+"alg": "y' R' U R U' R' U R",
+"votes": 4
+},
+{
+"case": 28,
+"alg": "L U2 L F' L' F L'",
+"votes": 4
+},
+{
+"case": 28,
+"alg": "L' U L2 F' L' F",
+"votes": 2
+},
+{
+"case": 28,
+"alg": "y R' U R U' R' U R",
+"votes": 2
+},
+{
+"case": 28,
+"alg": "L U L' U' l U L' U' M'",
+"votes": 2
+},
+{
+"case": 28,
+"alg": "L U2 L' U f' L f",
+"votes": 2
+},
+{
+"case": 29,
+"alg": "R' F R F' U R U' R'",
+"votes": 22
+},
+{
+"case": 29,
+"alg": "y L' U' L U L' U' L",
+"votes": 16
+},
+{
+"case": 29,
+"alg": "y' R' U' R U R' U' R",
+"votes": 16
+},
+{
+"case": 29,
+"alg": "L' U' L U L' U' L",
+"votes": 12
+},
+{
+"case": 29,
+"alg": "R' U' R U R' U' R",
+"votes": 11
+},
+{
+"case": 29,
+"alg": "R' F R F' R' F R F'",
+"votes": 7
+},
+{
+"case": 29,
+"alg": "y R' U' R U R' U' R",
+"votes": 7
+},
+{
+"case": 29,
+"alg": "U2 L U' L' f' L' f",
+"votes": 3
+},
+{
+"case": 29,
+"alg": "U R' U2 R U2 R' U' R",
+"votes": 3
+},
+{
+"case": 29,
+"alg": "U L' U2 L U2 L' U' L",
+"votes": 1
+},
+{
+"case": 29,
+"alg": "U F' L F L2 U' L",
+"votes": 1
+},
+{
+"case": 29,
+"alg": "f' L' f U f' L' f",
+"votes": 1
+},
+{
+"case": 29,
+"alg": "F' L F L' F' L F L'",
+"votes": 0
+},
+{
+"case": 29,
+"alg": "x' U' F' U F U' F' U x",
+"votes": 0
+},
+{
+"case": 29,
+"alg": "U f' U f R2 U' R",
+"votes": 0
+},
+{
+"case": 30,
+"alg": "R U R' U' R U R'",
+"votes": 34
+},
+{
+"case": 30,
+"alg": "L U L' U' L U L'",
+"votes": 8
+},
+{
+"case": 30,
+"alg": "L F' L' F U' L' U L",
+"votes": 6
+},
+{
+"case": 30,
+"alg": "y' L U L' U' L U L'",
+"votes": 6
+},
+{
+"case": 30,
+"alg": "f R f' U' f R f'",
+"votes": 4
+},
+{
+"case": 30,
+"alg": "U2 R' U R f R f'",
+"votes": 3
+},
+{
+"case": 30,
+"alg": "U' R U2 R' U2 R U R'",
+"votes": 2
+},
+{
+"case": 30,
+"alg": "U' F R' F' R2 U R'",
+"votes": 2
+},
+{
+"case": 30,
+"alg": "y' R U R' U' R U R'",
+"votes": 2
+},
+{
+"case": 30,
+"alg": "U' F U' R U2 R' F'",
+"votes": 2
+},
+{
+"case": 30,
+"alg": "y L U L' U' L U L'",
+"votes": 1
+},
+{
+"case": 30,
+"alg": "U' L U2 L' U2 L U L'",
+"votes": 1
+},
+{
+"case": 30,
+"alg": "y R U R' U' R U R'",
+"votes": 1
+},
+{
+"case": 30,
+"alg": "U2 F' U F R U R'",
+"votes": 0
+},
+{
+"case": 31,
+"alg": "U' R' F R F' R U' R'",
+"votes": 29
+},
+{
+"case": 31,
+"alg": "U L F' L' F L' U L",
+"votes": 10
+},
+{
+"case": 31,
+"alg": "R U' R' U y' R' U R",
+"votes": 7
+},
+{
+"case": 31,
+"alg": "R' U R' F R F' R",
+"votes": 7
+},
+{
+"case": 31,
+"alg": "L U' L F' L' F L'",
+"votes": 6
+},
+{
+"case": 31,
+"alg": "F' U F R U2 R'",
+"votes": 5
+},
+{
+"case": 31,
+"alg": "R U' R' U y L' U L",
+"votes": 5
+},
+{
+"case": 31,
+"alg": "f' L f U' L U' L'",
+"votes": 2
+},
+{
+"case": 31,
+"alg": "L' U L U' y L U' L'",
+"votes": 1
+},
+{
+"case": 31,
+"alg": "L' U L F U2 F'",
+"votes": 1
+},
+{
+"case": 31,
+"alg": "U' F' L F L' F U' F'",
+"votes": 1
+},
+{
+"case": 31,
+"alg": "B' U B L U2 L'",
+"votes": 1
+},
+{
+"case": 31,
+"alg": "L U2 L' U' l U L' U' M'",
+"votes": 1
+},
+{
+"case": 31,
+"alg": "R' U R f R2 f'",
+"votes": 1
+},
+{
+"case": 31,
+"alg": "R' U R y R U2 R'",
+"votes": 1
+},
+{
+"case": 31,
+"alg": "f R' f' U R' U R",
+"votes": 0
+},
+{
+"case": 32,
+"alg": "U R U' R' U R U' R' U R U' R'",
+"votes": 38
+},
+{
+"case": 32,
+"alg": "R U R' U' R U R' U' R U R'",
+"votes": 25
+},
+{
+"case": 32,
+"alg": "R2 U R2 U R2 U2 R2",
+"votes": 21
+},
+{
+"case": 32,
+"alg": "U' L' U L U' L' U L U' L' U L",
+"votes": 16
+},
+{
+"case": 32,
+"alg": "L U L' U' L U L' U' L U L'",
+"votes": 15
+},
+{
+"case": 32,
+"alg": "U' F R' F' R U' R U R'",
+"votes": 9
+},
+{
+"case": 32,
+"alg": "U' R' U R U' R' U R U' R' U R",
+"votes": 9
+},
+{
+"case": 32,
+"alg": "R' U' R U R' U' R U R' U' R",
+"votes": 8
+},
+{
+"case": 32,
+"alg": "U L U' L' U L U' L' U L U' L'",
+"votes": 4
+},
+{
+"case": 32,
+"alg": "L2 U L2 U L2 U2 L2",
+"votes": 3
+},
+{
+"case": 32,
+"alg": "U2 f R' U R U' R f'",
+"votes": 3
+},
+{
+"case": 32,
+"alg": "U L' U L U' L' U2 L U L' U' L",
+"votes": 2
+},
+{
+"case": 32,
+"alg": "U2 F U' R U R' U F'",
+"votes": 1
+},
+{
+"case": 32,
+"alg": "L' U' L U L' U' L U L' U' L",
+"votes": 0
+},
+{
+"case": 32,
+"alg": "U' L U' L' U L U2 L' U' L U L'",
+"votes": 0
+},
+{
+"case": 32,
+"alg": "R2 U' R2 U' R2 U2 R2",
+"votes": 0
+},
+{
+"case": 33,
+"alg": "U' R U' R' U2 R U' R'",
+"votes": 31
+},
+{
+"case": 33,
+"alg": "U' L U' L' U2 L U' L'",
+"votes": 10
+},
+{
+"case": 33,
+"alg": "U' R D R' U R D' R'",
+"votes": 8
+},
+{
+"case": 33,
+"alg": "R' D R U' R' D' R",
+"votes": 7
+},
+{
+"case": 33,
+"alg": "y R' D R U' R' D' R",
+"votes": 3
+},
+{
+"case": 33,
+"alg": "R U R' U' R U' R' U R U' R'",
+"votes": 3
+},
+{
+"case": 33,
+"alg": "U L' U2 L U' L' U' L",
+"votes": 3
+},
+{
+"case": 33,
+"alg": "U' R U' R' U' R U2 R'",
+"votes": 2
+},
+{
+"case": 33,
+"alg": "U' L U' L' U' L U2 L'",
+"votes": 2
+},
+{
+"case": 33,
+"alg": "U' L D L' U L D' L'",
+"votes": 1
+},
+{
+"case": 33,
+"alg": "U' L' U' L U2 L' U' L",
+"votes": 1
+},
+{
+"case": 33,
+"alg": "U R' U2 R U' R' U' R",
+"votes": 1
+},
+{
+"case": 33,
+"alg": "U' R' U' R U2 R' U' R",
+"votes": 1
+},
+{
+"case": 33,
+"alg": "D' R D R' U R D' R' D",
+"votes": 0
+},
+{
+"case": 33,
+"alg": "U R D R' U' R D' R'",
+"votes": 0
+},
+{
+"case": 34,
+"alg": "U R U R' U2 R U R'",
+"votes": 28
+},
+{
+"case": 34,
+"alg": "U' R U2 R' U R U R'",
+"votes": 20
+},
+{
+"case": 34,
+"alg": "U R' D' R U' R' D R",
+"votes": 9
+},
+{
+"case": 34,
+"alg": "y U L' U L U2 L' U L",
+"votes": 7
+},
+{
+"case": 34,
+"alg": "U R' U R U R' U2 R",
+"votes": 6
+},
+{
+"case": 34,
+"alg": "U L' U L U2 L' U L",
+"votes": 5
+},
+{
+"case": 34,
+"alg": "U L U L' U2 L U L'",
+"votes": 5
+},
+{
+"case": 34,
+"alg": "U L' D' L U' L' D L",
+"votes": 3
+},
+{
+"case": 34,
+"alg": "U' L U2 L' U L U L'",
+"votes": 2
+},
+{
+"case": 34,
+"alg": "U2 R D' R' U' R D R'",
+"votes": 1
+},
+{
+"case": 34,
+"alg": "U L' U L U L' U2 L",
+"votes": 0
+},
+{
+"case": 34,
+"alg": "L' U' L U L' U L U' L' U L",
+"votes": 0
+},
+{
+"case": 34,
+"alg": "U f R2 U R2 U' f'",
+"votes": 0
+},
+{
+"case": 34,
+"alg": "U R2 F R F' R U' R' U R",
+"votes": 0
+},
+{
+"case": 34,
+"alg": "U R' U R U2 R' U R",
+"votes": 0
+},
+{
+"case": 35,
+"alg": "U' R U R' U F' U' F",
+"votes": 25
+},
+{
+"case": 35,
+"alg": "U' R U R' d R' U' R",
+"votes": 17
+},
+{
+"case": 35,
+"alg": "U2 R U R' F R' F' R",
+"votes": 12
+},
+{
+"case": 35,
+"alg": "U2 F U F' U' L' U L",
+"votes": 9
+},
+{
+"case": 35,
+"alg": "U' L U L' U f' L' f",
+"votes": 7
+},
+{
+"case": 35,
+"alg": "U' f R f' U R' U' R",
+"votes": 6
+},
+{
+"case": 35,
+"alg": "U' R U R' U y' R' U' R",
+"votes": 5
+},
+{
+"case": 35,
+"alg": "U2 L F' L' F U2 L' U' L",
+"votes": 4
+},
+{
+"case": 35,
+"alg": "U' F R' F R F' U F'",
+"votes": 3
+},
+{
+"case": 35,
+"alg": "R' F R' F' R U R U' R' U' R",
+"votes": 3
+},
+{
+"case": 35,
+"alg": "U' F U F' U L' U' L",
+"votes": 2
+},
+{
+"case": 35,
+"alg": "U2 L U L' U' L F U F' L'",
+"votes": 2
+},
+{
+"case": 35,
+"alg": "U2 f R f' U' R' U R",
+"votes": 2
+},
+{
+"case": 35,
+"alg": "L U L' y R' U' R U R' U' R",
+"votes": 1
+},
+{
+"case": 35,
+"alg": "U2 L U M U L' U' M'",
+"votes": 1
+},
+{
+"case": 35,
+"alg": "U' R' F' U F U' R U R' U' R",
+"votes": 1
+},
+{
+"case": 36,
+"alg": "U F' U' F U' R U R'",
+"votes": 23
+},
+{
+"case": 36,
+"alg": "U2 R' F R F' U2 R U R'",
+"votes": 13
+},
+{
+"case": 36,
+"alg": "U f' L' f U' L U L'",
+"votes": 9
+},
+{
+"case": 36,
+"alg": "U L' U' L d' L U L'",
+"votes": 7
+},
+{
+"case": 36,
+"alg": "U R' U' R U' f R f'",
+"votes": 4
+},
+{
+"case": 36,
+"alg": "R U R' U R U R' U' F' U' F",
+"votes": 3
+},
+{
+"case": 36,
+"alg": "R2 u R U R' U' u' R' U R'",
+"votes": 3
+},
+{
+"case": 36,
+"alg": "U L' U' L U' F U F'",
+"votes": 3
+},
+{
+"case": 36,
+"alg": "U2 L' U L U F U F'",
+"votes": 3
+},
+{
+"case": 36,
+"alg": "U2 f' L' f U L U' L'",
+"votes": 3
+},
+{
+"case": 36,
+"alg": "U2 R' U' R U R' F' U' F R",
+"votes": 3
+},
+{
+"case": 36,
+"alg": "U2 L' U' L F' r U r'",
+"votes": 2
+},
+{
+"case": 36,
+"alg": "L F' L F L' U' L' U L U L'",
+"votes": 2
+},
+{
+"case": 36,
+"alg": "y U R' U' R U' f R f'",
+"votes": 1
+},
+{
+"case": 36,
+"alg": "U R' U' R y U' R U R'",
+"votes": 1
+},
+{
+"case": 36,
+"alg": "U R' U' R U' y R U R'",
+"votes": 1
+},
+{
+"case": 37,
+"alg": "R2 U2 F R2 F' U2 R' U R'",
+"votes": 37
+},
+{
+"case": 37,
+"alg": "R' F R F' R U' R' U R U' R' U2 R U' R'",
+"votes": 20
+},
+{
+"case": 37,
+"alg": "R U2 R' U R U2 R' U F' U' F",
+"votes": 10
+},
+{
+"case": 37,
+"alg": "R U R' U2 R U2 R' U y' R' U' R",
+"votes": 7
+},
+{
+"case": 37,
+"alg": "L U' L' l' U2 L2 U L2 U l",
+"votes": 6
+},
+{
+"case": 37,
+"alg": "R' U R r U2 R2 U' R2 U' r'",
+"votes": 5
+},
+{
+"case": 37,
+"alg": "L2 U2 F' L2 F U2 L U' L",
+"votes": 4
+},
+{
+"case": 37,
+"alg": "L' U2 L U' L' U2 L U' F U F'",
+"votes": 3
+},
+{
+"case": 37,
+"alg": "L' U' L U2 L' U2 L U' y' R U R'",
+"votes": 2
+},
+{
+"case": 37,
+"alg": "R' U2 R U' R' U2 R U' f R f'",
+"votes": 2
+},
+{
+"case": 37,
+"alg": "R' F R L' U' L U' R' F R L' U' L",
+"votes": 1
+},
+{
+"case": 37,
+"alg": "f' L f U' L U2 L' U2 L U' L'",
+"votes": 1
+},
+{
+"case": 37,
+"alg": "L U2 L' U L U2 L' U f' L' f",
+"votes": 1
+},
+{
+"case": 37,
+"alg": "L' f U f' L' U2 L2 U L2 U L",
+"votes": 1
+},
+{
+"case": 37,
+"alg": "R' U R f R U R2 U' R f'",
+"votes": 1
+},
+{
+"case": 37,
+"alg": "R' U' R U2 R' U2 R U' f R f'",
+"votes": 1
+},
+{
+"case": 38,
+"alg": "R U' R' U' R U R' U2 R U' R'",
+"votes": 22
+},
+{
+"case": 38,
+"alg": "R U R' U' R U2 R' U' R U R'",
+"votes": 13
+},
+{
+"case": 38,
+"alg": "R2 U2 R' U' R U' R' U2 R'",
+"votes": 7
+},
+{
+"case": 38,
+"alg": "L U L' U' L U2 L' U' L U L'",
+"votes": 5
+},
+{
+"case": 38,
+"alg": "R U' R' U' R U R' U' R U2 R'",
+"votes": 4
+},
+{
+"case": 38,
+"alg": "L' U L U' L' U2 L U' L' U L",
+"votes": 4
+},
+{
+"case": 38,
+"alg": "R' U' R U2 R' U R U' R' U' R",
+"votes": 4
+},
+{
+"case": 38,
+"alg": "R' U R U' R' U2 R U' R' U R",
+"votes": 3
+},
+{
+"case": 38,
+"alg": "L2 U2 L' U' L U' L' U2 L'",
+"votes": 2
+},
+{
+"case": 38,
+"alg": "F R U2 R' U' R U R' U2 F'",
+"votes": 1
+},
+{
+"case": 38,
+"alg": "L U' L' U' L U L' U' L U2 L'",
+"votes": 1
+},
+{
+"case": 38,
+"alg": "L U' L' U' L U L' U2 L U' L'",
+"votes": 1
+},
+{
+"case": 38,
+"alg": "L' U2 L' U' L U' L' U2 L2",
+"votes": 0
+},
+{
+"case": 38,
+"alg": "F U' R U2 R' U' R U2 R' F'",
+"votes": 0
+},
+{
+"case": 38,
+"alg": "R' U2 R' U' R U' R' U2 R2",
+"votes": 0
+},
+{
+"case": 39,
+"alg": "R U' R' U R U2 R' U R U' R'",
+"votes": 29
+},
+{
+"case": 39,
+"alg": "L U L' U2 L U' L' U L U L'",
+"votes": 8
+},
+{
+"case": 39,
+"alg": "R U2 R U R' U R U2 R2",
+"votes": 7
+},
+{
+"case": 39,
+"alg": "R' U' R U R' U2 R U R' U' R",
+"votes": 6
+},
+{
+"case": 39,
+"alg": "R U R' U2 R U' R' U R U R'",
+"votes": 4
+},
+{
+"case": 39,
+"alg": "R U2 R' U R U' R' U R U R'",
+"votes": 3
+},
+{
+"case": 39,
+"alg": "L' U' L U L' U2 L U L' U' L",
+"votes": 3
+},
+{
+"case": 39,
+"alg": "R' U R U R' U' R U2 R' U R",
+"votes": 3
+},
+{
+"case": 39,
+"alg": "L U' L' U L U2 L' U L U' L'",
+"votes": 2
+},
+{
+"case": 39,
+"alg": "F' L F L2 U2 L U L' U' L",
+"votes": 1
+},
+{
+"case": 39,
+"alg": "L' U L U L' U' L U2 L' U L",
+"votes": 1
+},
+{
+"case": 39,
+"alg": "F U2 R U' R' U R U2 R' F'",
+"votes": 1
+},
+{
+"case": 39,
+"alg": "L U2 L' U L U' L' U L U L'",
+"votes": 1
+},
+{
+"case": 39,
+"alg": "f R2 U R' U' F R' f' U F'",
+"votes": 1
+},
+{
+"case": 39,
+"alg": "L U2 L U L' U L U2 L2",
+"votes": 0
+},
+{
+"case": 39,
+"alg": "R2 U2 R U R' U R U2 R",
+"votes": 0
+},
+{
+"case": 40,
+"alg": "r U' r' U2 r U r' R U R'",
+"votes": 27
+},
+{
+"case": 40,
+"alg": "F' L' U2 L F R U R'",
+"votes": 15
+},
+{
+"case": 40,
+"alg": "R U' R' F R U R' U' F' R U' R'",
+"votes": 10
+},
+{
+"case": 40,
+"alg": "R U' R' U' R U' R' U y' R' U' R",
+"votes": 9
+},
+{
+"case": 40,
+"alg": "L' U L F R U2 R' F'",
+"votes": 6
+},
+{
+"case": 40,
+"alg": "l U' l' U2 l U l' L U L'",
+"votes": 6
+},
+{
+"case": 40,
+"alg": "R' U R r' U r U2 r' U' r",
+"votes": 6
+},
+{
+"case": 40,
+"alg": "L' U L l' U l U2 l' U' l",
+"votes": 3
+},
+{
+"case": 40,
+"alg": "L' U L R' F R U2 R' F' R",
+"votes": 2
+},
+{
+"case": 40,
+"alg": "f' L f L F U2 F' L'",
+"votes": 2
+},
+{
+"case": 40,
+"alg": "R' F' U2 F R f R f'",
+"votes": 2
+},
+{
+"case": 40,
+"alg": "L' U L U2 y L U L' U L U' L'",
+"votes": 1
+},
+{
+"case": 40,
+"alg": "f' L f U2 L U L' U L U' L'",
+"votes": 1
+},
+{
+"case": 40,
+"alg": "f' L f U2 L U L' U2 L U2 L'",
+"votes": 1
+},
+{
+"case": 40,
+"alg": "R' U R f U R2 U' f'",
+"votes": 1
+},
+{
+"case": 40,
+"alg": "R2 F' U' F U R U' R",
+"votes": 1
+},
+{
+"case": 41,
+"alg": "R U' R' r U' r' U2 r U r'",
+"votes": 24
+},
+{
+"case": 41,
+"alg": "R U' R' F' L' U2 L F",
+"votes": 9
+},
+{
+"case": 41,
+"alg": "R U R' U' y M U' R' F R U M'",
+"votes": 7
+},
+{
+"case": 41,
+"alg": "l' U l U2 l' U' l L' U' L",
+"votes": 7
+},
+{
+"case": 41,
+"alg": "R U R' U' R U' R' U2 y' R' U' R",
+"votes": 6
+},
+{
+"case": 41,
+"alg": "r' U r U2 r' U' r R' U' R",
+"votes": 5
+},
+{
+"case": 41,
+"alg": "f' L f U' L U L' U L U L'",
+"votes": 2
+},
+{
+"case": 41,
+"alg": "L' U L U L' U L U' y' R U R'",
+"votes": 1
+},
+{
+"case": 41,
+"alg": "F R U2 R' F' L' U' L",
+"votes": 1
+},
+{
+"case": 41,
+"alg": "R' F R U2 R' F' R L' U' L",
+"votes": 1
+},
+{
+"case": 41,
+"alg": "L2 F U F' U' L' U L'",
+"votes": 1
+},
+{
+"case": 41,
+"alg": "L F U2 F' L' f' L' f",
+"votes": 1
+},
+{
+"case": 41,
+"alg": "L U' L' d' U' R' U' R U' R' U R",
+"votes": 1
+},
+{
+"case": 41,
+"alg": "R' U R' U' F' U F R2",
+"votes": 1
+},
+{
+"case": 41,
+"alg": "f R' f' U2 R' U' R U' R' U R",
+"votes": 1
+},
+{
+"case": 41,
+"alg": "f R' f' U2 R' U' R U2 R' U2 R",
+"votes": 1
+}
+]

@@ -94,3 +94,23 @@ searched by viewing the cube after a whole-cube rotation.
   Worker and takes under 10 ms per solve once the tables exist.
 - **Verification.** Every reported solution is checked on the sticker model in the tests. The cubie
   model is checked against both the sticker model and cubing.js `KPuzzle`.
+
+## F2L pair analysis
+
+At each decision point (after the cross and after each pair) every open slot gets:
+
+- **Case.** Its standard F2L case (1–41). The numbering matches zb-trainer's ZBLS sheet, or the pair is
+  marked as having a piece in another slot.
+- **Search.** The cheapest solutions by human cost. The search runs in the grip you had at the time,
+  can use `y` rotations, and keeps the cross and finished slots intact. It adds a small penalty for
+  inserting into a front slot while back slots are open, and charges for switching hands between `R`
+  and `L`.
+- **Known algorithms.** The algorithms that solve the pair from where it is, used directly or after a
+  `y` rotation with any pre-AUF, cheapest first with their community votes.
+
+The decision point ranks the open slots. It flags a pair choice that cost more than 2.0 over the
+cheapest, and lists free pairs (cost ≤ 4).
+
+The known algorithms are the 622 F2L algorithms on [SpeedCubeDB](https://speedcubedb.com/a/3x3/F2L),
+covering all 41 cases in all four slots. Each one's slot and case are checked by running it backwards
+from solved.
