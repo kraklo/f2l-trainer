@@ -22,14 +22,23 @@ export interface MergeOptions {
   /** Two same-direction quarter turns of one face within this gap become a half turn. */
   halfTurnGapMs: number;
   /**
-   * Slice and wide moves the solver uses. A turn plus a rotation on the same axis is only merged into
-   * one of these. y-axis ones (d, u, E) are off by default: "U + y regrip" is far more common in F2L
-   * than a real d, and the two look the same to the cube at 10 Hz gyro.
+   * Slice and wide moves the solver uses; a turn plus a rotation is only merged into one of these.
+   * y-axis ones (d, u, E) are off by default: at solving speed a U + y regrip overlaps the turn just
+   * like a real d does (fixtures/moves and solves 2-5), so the cube can't tell them apart.
    */
   wides: string;
+  /**
+   * In a real wide move the body is still rotating when the cube reports the turn; in a deliberate
+   * turn-then-rotate it isn't. Merge only when at least this share of the rotation was done at the
+   * turn. From the labelled recording: d 39-88%, U then y' 3-20%, r 17-82%, L then x 7-18%.
+   */
+  minProgress: number;
 }
 
-export const DEFAULT_MERGE: MergeOptions = { sliceWindowMs: 250, halfTurnGapMs: 300, wides: 'rlfbMS' };
+export const DEFAULT_MERGE: MergeOptions = { sliceWindowMs: 250, halfTurnGapMs: 300, wides: 'rlfbMS', minProgress: 0.25 };
+
+/** Share (0-1) of a nearby whole-cube rotation already done at time t, from the gyro. */
+export type RotationProgress = (t: number) => number;
 
 const AXIS_FACES: Record<string, [string, string]> = { x: ['R', 'L'], y: ['U', 'D'], z: ['F', 'B'] };
 
@@ -62,7 +71,7 @@ function comboKey(turns: Move[], rotation: Move): string {
 }
 
 /** Combines rotations with nearby turns on the same axis into slice and wide moves. */
-function mergeSlices(tokens: Token[], opts: MergeOptions): { tokens: Token[]; merged: number } {
+function mergeSlices(tokens: Token[], opts: MergeOptions, progress?: RotationProgress): { tokens: Token[]; merged: number } {
   const out = tokens.slice();
   let merged = 0;
   for (let i = 0; i < out.length; i++) {
@@ -81,6 +90,7 @@ function mergeSlices(tokens: Token[], opts: MergeOptions): { tokens: Token[]; me
       if (g.length === 2 && out[g[0]].move.base === out[g[1]].move.base) continue;
       const combo = COMBOS.get(comboKey(g.map((k) => out[k].move), rot.move));
       if (!combo || !opts.wides.includes(combo.base)) continue;
+      if (progress && Math.max(...g.map((k) => progress(out[k].t))) < opts.minProgress) continue;
       const parts = [...g.map((k) => out[k]), rot];
       const first = Math.min(...g, i);
       const token: Token = {
@@ -125,7 +135,7 @@ function mergeHalves(tokens: Token[], opts: MergeOptions): Token[] {
   return out;
 }
 
-export function mergeTokens(tokens: Token[], opts = DEFAULT_MERGE): { tokens: Token[]; merged: number } {
-  const { tokens: sliced, merged } = mergeSlices(tokens, opts);
+export function mergeTokens(tokens: Token[], opts = DEFAULT_MERGE, progress?: RotationProgress): { tokens: Token[]; merged: number } {
+  const { tokens: sliced, merged } = mergeSlices(tokens, opts, progress);
   return { tokens: mergeHalves(sliced, opts), merged };
 }

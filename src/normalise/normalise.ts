@@ -6,7 +6,7 @@
 import { FACES, fromFaceletString, parseAlg, type Move } from '../cube/cube';
 import { COLOUR_NAMES, slotName } from '../cube/pieces';
 import { angleBetween, qconj, qmul, referenceGrip, snap } from '../device/gyro';
-import { type Face, type Quat, type SolveRecord } from '../record/types';
+import { type Face, type GyroSample, type Quat, type SolveRecord } from '../record/types';
 import { segmentRaw } from '../segment/segment';
 import { DEFAULT_TIMELINE, FACE_MAPS, gripTilt, orientationTimeline, orientationsWith, rotationAlg, type FrameChange, type TimelineOptions } from './frames';
 import { DEFAULT_MERGE, mergeTokens, type MergeOptions, type Token } from './merge';
@@ -117,7 +117,7 @@ export function reconstruct(rec: SolveRecord, opts = DEFAULT_NORMALISE): Reconst
     }
     raw.push({ move: { base: FACE_MAPS[f][m.face], amount: m.amount }, t: times[i], tEnd: times[i], src: [i], rotation: false, frame: f });
   });
-  const { tokens, merged } = mergeTokens(raw, opts.merge);
+  const { tokens, merged } = mergeTokens(raw, opts.merge, changes[0].t > -Infinity ? rotationProgress(after, pre) : undefined);
 
   const rawToToken: number[] = [];
   tokens.forEach((tok, k) => tok.src.forEach((s) => (rawToToken[s] = k)));
@@ -157,6 +157,25 @@ export function reconstruct(rec: SolveRecord, opts = DEFAULT_NORMALISE): Reconst
       crossOnBottom: f2lTurns.length ? f2lTurns.filter((t) => FACE_MAPS[t.frame][crossFace] === 'D').length / f2lTurns.length : 0,
       merged,
     },
+  };
+}
+
+/** Share of a whole-cube rotation within ±400 ms of t that was already done at t. */
+function rotationProgress(samples: GyroSample[], pre: Quat): (t: number) => number {
+  const rel = samples.map((g) => ({ t: g.hostTs, q: qmul(pre, g.q) }));
+  const at = (t: number): Quat => {
+    const i = rel.findIndex((g) => g.t >= t);
+    if (i <= 0) return (i === 0 ? rel[0] : rel[rel.length - 1]).q;
+    const a = rel[i - 1], b = rel[i];
+    const f = b.t > a.t ? (t - a.t) / (b.t - a.t) : 0;
+    const sign = a.q[0] * b.q[0] + a.q[1] * b.q[1] + a.q[2] * b.q[2] + a.q[3] * b.q[3] < 0 ? -1 : 1;
+    const q = a.q.map((v, k) => v * (1 - f) + sign * b.q[k] * f) as Quat;
+    const n = Math.hypot(...q);
+    return q.map((v) => v / n) as Quat;
+  };
+  return (t) => {
+    const before = at(t - 400), total = angleBetween(before, at(t + 400));
+    return total < 45 ? 0 : Math.min(1, angleBetween(before, at(t)) / total);
   };
 }
 

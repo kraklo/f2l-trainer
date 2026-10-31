@@ -29,6 +29,12 @@ describe('mergeTokens', () => {
     expect(mergeTokens(tokens("y'@0 U@50"), { ...DEFAULT_MERGE, wides: 'd' }).tokens.map((t) => moveToString(t.move))).toEqual(['d']);
   });
 
+  it('only merges when the body was rotating as the turn registered', () => {
+    const run = (progress: number) => mergeTokens(tokens("U@0 y'@100"), { ...DEFAULT_MERGE, wides: 'd' }, () => progress).tokens.map((t) => moveToString(t.move)).join(' ');
+    expect(run(0.6)).toBe('d');
+    expect(run(0.1)).toBe("U y'");
+  });
+
   it('leaves rotations far from the turn alone', () => {
     expect(merged('L@0 x@900')).toBe('L x');
   });

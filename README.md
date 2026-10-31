@@ -72,8 +72,10 @@ you have checked by hand as `fixtures/expected/<name>`, which the tests then hol
 - **Clock.** Times use the cube's clock, fitted to the host clock (about 45 ms of Bluetooth jitter removed).
 - **Rotations.** Rotations come from the gyro relative to the scramble grip. The leftover tilt of the
   solving grip is removed by assuming the cross is on D during F2L.
-- **Merging.** Merging into slice and wide moves is configurable. `d`/`u`/`E` are off by default, because
-  a `U` + `y` regrip looks the same to the cube as a `d`.
+- **Merging.** Merging into slice and wide moves is configurable. `d`/`u`/`E` are off by default, because at solving speed
+  a `U` + `y` regrip looks the same to the cube as a `d`. Merges also require the gyro to show the body still
+  rotating when the turn registers (`fixtures/moves`). The GAN16 reports angular velocity as 0, so velocity
+  can't help.
 - **Stages.**
   - The cross counts as done once it stays intact, apart from breaks of up to 16 moves while pairs are inserted.
   - Slots are judged at moments when the cross is intact.
