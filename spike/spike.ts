@@ -25,6 +25,16 @@ let stored = 0;
 let lastFixture: SolveFixture | null = null;
 /** Free-form gyro recording for checking axis conventions and the held grip. */
 let gyroTest: { startedAt: number; gyro: GyroSample[]; moves: RawMove[] } | null = null;
+/** Labelled wide-move recording, to learn how a real d differs from U + y. */
+let moveTest: { startedAt: number; steps: string[]; events: GanCubeEvent[] } | null = null;
+const MOVE_TEST_STEPS = [
+  'd, pause 2 s — four times',
+  "U then y' (your normal F2L regrip), pause 2 s — four times",
+  "y' then U, pause 2 s — four times",
+  'r, pause 2 s — four times',
+  'L then x, pause 2 s — four times',
+  "M', pause 2 s — four times",
+];
 const gyroTimes: number[] = [];
 const allMoves: GanCubeMove[] = [];
 
@@ -57,6 +67,7 @@ async function connect() {
 
 function onEvent(e: GanCubeEvent) {
   recorder.handle(e);
+  moveTest?.events.push(e);
   switch (e.type) {
     case 'GYRO': {
       const q = e.quaternion;
@@ -171,6 +182,18 @@ function toggleGyroTest() {
   render();
 }
 
+function toggleMoveTest() {
+  if (moveTest) {
+    download(moveTest, `move-test-${stamp(moveTest.startedAt)}.json`);
+    log(`move test saved: ${moveTest.events.length} events`);
+    moveTest = null;
+  } else {
+    moveTest = { startedAt: Date.now(), steps: MOVE_TEST_STEPS, events: [] };
+    log('move test recording — follow the steps under the scramble, then press Stop');
+  }
+  render();
+}
+
 async function resetCube() {
   if (!cube || !confirm("Only do this when the cube is physically solved. Reset the cube's internal state to solved?")) return;
   await cube.reset();
@@ -221,10 +244,18 @@ function render() {
     h('button', { onclick: saveFixture, disabled: !lastFixture }, 'Download fixture'),
     h('button', { onclick: exportBackup }, 'Export all'),
     h('button', { onclick: importBackup }, 'Import'),
-    h('button', { onclick: toggleGyroTest, disabled: !connected || busy }, gyroTest ? 'Stop & save gyro test' : 'Gyro test'),
+    h('button', { onclick: toggleGyroTest, disabled: !connected || busy || !!moveTest }, gyroTest ? 'Stop & save gyro test' : 'Gyro test'),
+    h('button', { onclick: toggleMoveTest, disabled: !connected || busy || !!gyroTest }, moveTest ? 'Stop & save move test' : 'Move test'),
     h('button', { onclick: resetCube, disabled: !connected }, 'Reset cube state'),
   );
-  if (gyroTest) {
+  if (moveTest) {
+    clear(
+      scrambleEl,
+      h('div', { class: 'next' }, 'Move test'),
+      h('p', { class: 'muted' }, 'Hold white top, green front. Do each step at normal solving speed; four reps bring you back to the start.'),
+      h('ol', null, MOVE_TEST_STEPS.map((s) => h('li', null, s))),
+    );
+  } else if (gyroTest) {
     clear(
       scrambleEl,
       h('div', { class: 'next' }, 'Gyro test'),

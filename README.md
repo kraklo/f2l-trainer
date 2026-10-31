@@ -62,3 +62,18 @@ Each check must pass for a fixture to count:
   2. Each gyro sample becomes `ref⁻¹ ⊗ q`, snapped to the nearest of the 24 orientations, with hysteresis.
   3. After segmentation, the cross colour must sit on D for most of F2L. That check corrects any
      leftover tilt in the reference.
+
+## Reconstruction
+
+`npm run recon` prints each fixture's reconstruction: cross colour, inspection rotation, then each stage
+with turns, time, look-ahead pause and moves. `npm run recon -- --write <name>` saves a reconstruction
+you have checked by hand as `fixtures/expected/<name>`, which the tests then hold it to.
+
+- **Clock.** Times use the cube's clock, fitted to the host clock (about 45 ms of Bluetooth jitter removed).
+- **Rotations.** Rotations come from the gyro relative to the scramble grip. The leftover tilt of the
+  solving grip is removed by assuming the cross is on D during F2L.
+- **Merging.** Merging into slice and wide moves is configurable. `d`/`u`/`E` are off by default, because
+  a `U` + `y` regrip looks the same to the cube as a `d`.
+- **Stages.**
+  - The cross counts as done once it stays intact, apart from breaks of up to 16 moves while pairs are inserted.
+  - Slots are judged at moments when the cross is intact.

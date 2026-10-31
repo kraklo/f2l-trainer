@@ -1,0 +1,34 @@
+{
+  "cross": "yellow",
+  "inspection": "y",
+  "stages": [
+    {
+      "kind": "cross",
+      "alg": "R' D2 F R' U y F R' F'"
+    },
+    {
+      "kind": "pair",
+      "slot": "green-orange",
+      "heldSlot": "BL",
+      "alg": "U L' U2 L U y' L U L'"
+    },
+    {
+      "kind": "pair",
+      "slot": "red-blue",
+      "heldSlot": "BR",
+      "alg": "U' R U' R' U y' R' U R"
+    },
+    {
+      "kind": "pair",
+      "slot": "red-green",
+      "heldSlot": "FL",
+      "alg": "U2 R U2 R' U' y R' U' R U U F y' U R' U' y R' U' R U2 L' U L"
+    },
+    {
+      "kind": "pair",
+      "slot": "orange-blue",
+      "heldSlot": "FL",
+      "alg": "U' y U R U' R' U' y L' U L"
+    }
+  ]
+}
