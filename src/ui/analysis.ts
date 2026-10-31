@@ -212,6 +212,12 @@ export class AnalysisView implements View {
     };
   }
 
+  /** Drop the replays: a TwistyPlayer that is detached and re-attached adds another 3D view. */
+  leave() {
+    clear(this.el);
+    this.players = [];
+  }
+
   get hasSolve(): boolean {
     return !!this.record;
   }

@@ -1,7 +1,7 @@
 // Guides the user through a scramble turn by turn. Wrong turns are absorbed: the remaining alg is
 // always "undo what went off track, then the rest of the scramble", simplified.
 
-import { algToString, applyMove, equalFacelets, invertMoves, parseAlg, type Facelets, type Move } from '../cube/cube';
+import { algToString, applyMove, equalFacelets, invertMoves, moveToString, parseAlg, type Facelets, type Move } from '../cube/cube';
 
 export class ScrambleTracker {
   readonly moves: Move[];
@@ -33,6 +33,20 @@ export class ScrambleTracker {
   /** Moves still needed to reach the scrambled state. */
   get remaining(): string {
     return algToString(simplify([...invertMoves(this.offTrack), ...this.moves.slice(this.k)]));
+  }
+
+  /**
+   * What to show for a fixed-width scramble row: how many moves are done, what to turn in the next
+   * move's place (the rest of a half turn when one quarter is done), and any wrong turns to undo first.
+   */
+  get display(): { done: number; next: string | null; undo: string } {
+    const next = this.moves[this.k];
+    if (!this.offTrack.length) return { done: this.k, next: next ? moveToString(next) : null, undo: '' };
+    if (next) {
+      const merged = simplify([...invertMoves(this.offTrack), next]);
+      if (merged.length === 1 && merged[0].base === next.base) return { done: this.k, next: moveToString(merged[0]), undo: '' };
+    }
+    return { done: this.k, next: next ? moveToString(next) : null, undo: algToString(simplify(invertMoves(this.offTrack))) };
   }
 
   move(m: Move) {

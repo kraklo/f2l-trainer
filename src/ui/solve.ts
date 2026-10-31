@@ -1,9 +1,14 @@
 // Solve screen: scramble guidance, live cube, timer and live stage splits.
 // The splits here are a live estimate; the analysis recomputes them exactly from the recording.
+//
+// The layout is built once and only its text is updated: re-attaching a TwistyPlayer makes it add
+// another 3D view, so the live cube stays put while the screen is shown and is rebuilt (from the
+// moves since the scramble started) when the screen is shown again.
 
 import { type GanCubeEvent } from 'gan-web-bluetooth';
 import { randomScrambleForEvent } from 'cubing/scramble';
 import { type App, type View } from '../app';
+import { moveToString } from '../cube/cube';
 import { crossSolved, slotSolved, slotsFor } from '../cube/pieces';
 import { CubeView } from '../render/cubeview';
 import { clear, h, toast } from './dom';
@@ -12,13 +17,25 @@ const STAGE_NAMES = ['Cross', 'Pair 1', 'Pair 2', 'Pair 3', 'Pair 4'];
 
 export class SolveView implements View {
   el = h('section', { class: 'view solve' });
-  private cubeView: CubeView | null = null;
-  private cubeBox = h('div', { class: 'cube-box' });
+  private controlsEl = h('div', { class: 'controls' });
+  private promptEl = h('div', { class: 'prompt-area' });
   private timerEl = h('div', { class: 'timer' }, '0.00');
+  private cubeBox = h('div', { class: 'cube-box' });
+  private splitsEl = h('tbody');
+  private cubeView: CubeView | null = null;
+  /** Turns since the scramble started, to rebuild the live cube. */
+  private liveMoves: string[] = [];
   private splits: number[] = [];
   private raf = 0;
 
   constructor(private app: App) {
+    this.el.append(
+      h('div', { class: 'solve-main' }, this.controlsEl, this.promptEl, this.timerEl, this.cubeBox),
+      h('aside', { class: 'splits panel' },
+        h('h3', null, 'Splits'),
+        h('table', null, this.splitsEl),
+        h('p', { class: 'muted small' }, 'Live estimate; the analysis has exact splits.')),
+    );
     app.recorder.on(() => {
       if (app.view === 'solve') this.update();
     });
@@ -36,13 +53,17 @@ export class SolveView implements View {
     }
     const scramble = (await randomScrambleForEvent('333')).toString();
     this.splits = [];
+    this.liveMoves = [];
     this.cubeView?.show('');
+    this.timerEl.textContent = '0.00';
     rec.startScramble(scramble);
     this.render();
   }
 
   onCubeEvent(e: GanCubeEvent) {
-    if (e.type === 'MOVE') this.cubeView?.addMove(e.move);
+    if (e.type !== 'MOVE') return;
+    this.liveMoves.push(e.move);
+    this.cubeView?.addMove(e.move);
   }
 
   /** Records a split whenever the best F2L progress (cross, then each slot) goes up. */
@@ -63,17 +84,15 @@ export class SolveView implements View {
     if (this.app.recorder.phase === 'solving' && start !== undefined) {
       this.timerEl.textContent = ((performance.now() - start) / 1000).toFixed(2);
       this.raf = requestAnimationFrame(this.tick);
+    } else {
+      this.raf = 0;
     }
   };
 
   private update() {
-    const phase = this.app.recorder.phase;
-    if (phase === 'solving') {
+    if (this.app.recorder.phase === 'solving') {
       this.trackSplits();
       if (!this.raf) this.raf = requestAnimationFrame(this.tick);
-    } else {
-      cancelAnimationFrame(this.raf);
-      this.raf = 0;
     }
     this.render();
   }
@@ -81,15 +100,43 @@ export class SolveView implements View {
   leave() {
     cancelAnimationFrame(this.raf);
     this.raf = 0;
+    this.cubeView?.player.remove();
+    this.cubeView = null;
+  }
+
+  /** A scramble row of fixed-width cells: done moves become dots, so nothing shifts. */
+  private scrambleRow(): HTMLElement {
+    const tracker = this.app.recorder.tracker!;
+    const { done, next, undo } = tracker.display;
+    return h('div', null,
+      h('div', { class: 'muted small' }, 'Scramble with white on top, green in front'),
+      h('div', { class: 'scramble' }, tracker.moves.map((m, i) =>
+        h('span', { class: `mv ${i < done ? 'done' : i === done ? 'next' : ''}` }, i < done ? '·' : i === done && next ? next : moveToString(m)))),
+      h('div', { class: 'undo' }, undo ? `Undo: ${undo}` : ''));
   }
 
   render() {
-    const { recorder, cube } = this.app;
-    if (this.app.settings.liveCube && !this.cubeView) this.cubeView = new CubeView(this.cubeBox, { hintFacelets: false, tempoScale: 5 });
+    const { recorder, cube, settings } = this.app;
+    if (settings.liveCube && !this.cubeView) {
+      this.cubeView = new CubeView(this.cubeBox, { hintFacelets: false, tempoScale: 5 });
+      this.cubeView.show(this.liveMoves.join(' '));
+    } else if (!settings.liveCube && this.cubeView) {
+      this.leave();
+    }
+    this.cubeBox.hidden = !settings.liveCube;
+
+    const busy = recorder.phase !== 'idle' && recorder.phase !== 'done';
+    clear(this.controlsEl,
+      h('button', { class: 'primary', disabled: !cube || busy, onclick: () => this.newScramble() }, 'New scramble'),
+      busy ? h('button', { onclick: () => recorder.cancel() }, 'Cancel') : null,
+      cube && !recorder.canScramble && !busy
+        ? h('button', { onclick: async () => confirm("Reset the cube's internal state to solved? Only do this if it is physically solved.") && (await cube.reset()) }, 'Cube is solved')
+        : null);
+
     let prompt: HTMLElement;
     switch (recorder.phase) {
       case 'scrambling':
-        prompt = h('div', null, h('div', { class: 'muted small' }, 'Scramble with white on top, green in front'), h('div', { class: 'scramble' }, recorder.tracker?.remaining || '✓'));
+        prompt = this.scrambleRow();
         break;
       case 'inspection':
         prompt = h('div', { class: 'prompt' }, 'Inspect. The timer starts on your first turn.');
@@ -102,26 +149,11 @@ export class SolveView implements View {
         prompt = h('div', { class: 'prompt muted' },
           !cube ? 'Connect your cube to start.' : !recorder.synced ? 'Waiting for the cube…' : recorder.canScramble ? 'Press New scramble.' : 'Solve the cube to start a new scramble.');
     }
-    const busy = recorder.phase !== 'idle' && recorder.phase !== 'done';
-    clear(this.el,
-      h('div', { class: 'solve-main' },
-        h('div', { class: 'controls' },
-          h('button', { class: 'primary', disabled: !cube || busy, onclick: () => this.newScramble() }, 'New scramble'),
-          busy ? h('button', { onclick: () => recorder.cancel() }, 'Cancel') : null,
-          cube && !recorder.canScramble && !busy
-            ? h('button', { onclick: async () => confirm("Reset the cube's internal state to solved? Only do this if it is physically solved.") && (await cube.reset()) }, 'Cube is solved')
-            : null),
-        prompt,
-        this.timerEl,
-        this.app.settings.liveCube ? this.cubeBox : null),
-      h('aside', { class: 'splits panel' },
-        h('h3', null, 'Splits'),
-        h('table', null, h('tbody', null, STAGE_NAMES.map((name, i) => h('tr', null,
-          h('td', null, name),
-          h('td', { class: 'num' }, this.splits[i] !== undefined ? (this.splits[i] / 1000).toFixed(2) : '–'),
-          h('td', { class: 'num muted' }, this.splits[i] !== undefined && i > 0 ? `+${((this.splits[i] - this.splits[i - 1]) / 1000).toFixed(2)}` : ''))))),
-        h('p', { class: 'muted small' }, 'Live estimate; the analysis has exact splits.')),
-    );
-    if (recorder.phase !== 'solving' && this.start === undefined) this.timerEl.textContent = '0.00';
+    clear(this.promptEl, prompt);
+
+    clear(this.splitsEl, STAGE_NAMES.map((name, i) => h('tr', null,
+      h('td', null, name),
+      h('td', { class: 'num' }, this.splits[i] !== undefined ? (this.splits[i] / 1000).toFixed(2) : '–'),
+      h('td', { class: 'num muted' }, this.splits[i] !== undefined && i > 0 ? `+${((this.splits[i] - this.splits[i - 1]) / 1000).toFixed(2)}` : ''))));
   }
 }

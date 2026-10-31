@@ -126,7 +126,13 @@ tr.chosen td { background: rgba(96, 165, 250, 0.08); }
 
 .view.solve { display: grid; grid-template-columns: 1fr 280px; gap: 24px; }
 .solve-main { display: flex; flex-direction: column; align-items: center; gap: 12px; min-width: 0; }
-.scramble { font: 600 26px/1.3 ui-monospace, 'SF Mono', Menlo, monospace; text-align: center; word-spacing: 0.2em; }
+.scramble { display: flex; flex-wrap: wrap; justify-content: center; max-width: 760px; font: 600 26px/1.4 ui-monospace, 'SF Mono', Menlo, monospace; }
+/* fixed-width cells, so finishing a move never moves the rest of the row */
+.scramble .mv { width: 3.2ch; text-align: center; }
+.scramble .mv.done { color: var(--muted); }
+.scramble .mv.next { color: var(--accent); }
+.undo { min-height: 1.5em; text-align: center; color: var(--bad); font: 600 20px/1.5 ui-monospace, 'SF Mono', Menlo, monospace; }
+.prompt-area { min-height: 120px; display: flex; align-items: center; justify-content: center; }
 .prompt { font-size: 18px; text-align: center; }
 .timer { font: 600 56px/1 ui-monospace, 'SF Mono', Menlo, monospace; font-variant-numeric: tabular-nums; }
 .cube-box { width: min(100%, 420px); aspect-ratio: 1; }
@@ -183,6 +189,7 @@ table.compact td { padding: 4px 6px; }
   .view.solve, .detail-cols, .replays { grid-template-columns: 1fr; }
   .row { grid-template-columns: 1fr; gap: 6px; }
   .scramble { font-size: 20px; }
+  .scramble .mv { width: 3ch; }
   .timer { font-size: 44px; }
 }
 

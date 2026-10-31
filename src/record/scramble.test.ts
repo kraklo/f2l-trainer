@@ -37,4 +37,19 @@ describe('ScrambleTracker', () => {
     play(t, 'U');
     expect(t.done).toBe(true);
   });
+
+  it('describes a fixed-width row: done count, next move, and what to undo', () => {
+    const t = new ScrambleTracker("R2 U F'", solvedFacelets());
+    expect(t.display).toEqual({ done: 0, next: 'R2', undo: '' });
+    t.move({ base: 'R', amount: 1 });
+    // half of R2 done: the same cell asks for the other quarter
+    expect(t.display).toEqual({ done: 0, next: 'R', undo: '' });
+    t.move({ base: 'R', amount: 1 });
+    expect(t.display).toEqual({ done: 1, next: 'U', undo: '' });
+    t.move({ base: 'F', amount: 1 });
+    expect(t.display).toEqual({ done: 1, next: 'U', undo: "F'" });
+    t.move({ base: 'F', amount: 3 });
+    play(t, "U F'");
+    expect(t.display).toEqual({ done: 3, next: null, undo: '' });
+  });
 });
