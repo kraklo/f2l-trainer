@@ -19,6 +19,7 @@ import { algCubingUrl } from './links';
 import { buildSteps, type OptionItem, type Playable, type Step } from './steps';
 
 const sec = (ms: number) => (ms / 1000).toFixed(2);
+const pct = (ms: number, total: number) => `${((ms / (total || 1)) * 100).toFixed(1)}%`;
 
 function reconstructionText(a: Analysis): string {
   const lines = a.recon.inspection ? [`${a.recon.inspection} // inspection`] : [];
@@ -60,7 +61,7 @@ export function overviewPanel(record: SolveRecord, a: Analysis, steps: Step[], u
       h('a', { href: algCubingUrl(record.scramble, reconstructionText(a), `F2L Trainer ${new Date(record.startedAt).toLocaleDateString()}`), target: '_blank', rel: 'noopener' }, 'Reconstruction on alg.cubing.net')),
     h('div', { class: 'timeline' }, segs.map((s, i) => {
       const look = s.durationMs ? Math.min(1, s.recognitionMs / s.durationMs) : 0;
-      return h('div', { class: `seg ${s.kind}`, style: { flexGrow: String(Math.max(s.durationMs, 1) / (total || 1)) }, title: `${sec(s.durationMs)} s, look-ahead ${sec(s.recognitionMs)} s`, onclick: () => ui.goTo(stepOf(keyOf(i))) },
+      return h('div', { class: `seg ${s.kind}`, style: { flexGrow: String(Math.max(s.durationMs, 1) / (total || 1)) }, title: `${sec(s.durationMs)} s (${pct(s.durationMs, total)}), look-ahead ${sec(s.recognitionMs)} s`, onclick: () => ui.goTo(stepOf(keyOf(i))) },
         h('div', { class: 'look', style: { width: `${(look * 100).toFixed(1)}%` } }),
         h('span', null, s.kind === 'pair' ? `P${i}` : s.kind === 'cross' ? 'X' : 'LL'));
     })),
@@ -69,7 +70,7 @@ export function overviewPanel(record: SolveRecord, a: Analysis, steps: Step[], u
       h('tbody', null, steps.slice(1).map((st, k) => h('tr', { class: 'clickable', onclick: () => ui.goTo(k + 1) },
         h('td', null, st.title, st.segment?.slot ? h('span', { class: 'muted small' }, ` ${st.segment.slot}`) : null),
         h('td', { class: 'num' }, String(st.yours.turns)),
-        h('td', { class: 'num' }, sec(st.yours.ms)),
+        h('td', { class: 'num' }, `${sec(st.yours.ms)}s`, h('span', { class: 'muted small' }, ` (${pct(st.yours.ms, total)})`)),
         h('td', { class: 'num' }, st.key === 'cross' ? '' : sec(st.yours.lookMs)),
         h('td', null,
           st.key === 'cross' ? `${st.yours.turns} → ${a.cross.used.optimal} moves` : st.yours.cost !== undefined && st.yours.best !== undefined ? `${st.yours.cost.toFixed(1)} → ${st.yours.best.toFixed(1)}` : '',
