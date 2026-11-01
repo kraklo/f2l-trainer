@@ -6,8 +6,9 @@
 // adds another 3D view); stepping only swaps the panel and the player's setup and moves.
 
 import { type App, type View } from '../app';
-import { fromFaceletString } from '../cube/cube';
+import { fromFaceletString, moveToString } from '../cube/cube';
 import { COLOUR_NAMES } from '../cube/pieces';
+import { recordRhythm } from '../lookahead/rhythm';
 import { type SolveRecord } from '../record/types';
 import { CubeView } from '../render/cubeview';
 import { pairDiagram } from '../render/svg';
@@ -43,6 +44,41 @@ export interface StepUi {
   selected: string | null;
   goTo(step: number): void;
   play(item: OptionItem | null): void;
+  /** Look-ahead solves: go on to the next scramble. */
+  nextLookahead?(): void;
+}
+
+/**
+ * Look-ahead result: tempo, beats hit and filler, and every turn on its beat (in the held frame).
+ * A dot is a beat with no turn.
+ */
+export function lookaheadPanel(record: SolveRecord, a: Analysis, ui: StepUi): HTMLElement | null {
+  const r = recordRhythm(record);
+  if (!r) return null;
+  const tokenOf: number[] = [];
+  a.recon.tokens.forEach((t, k) => t.src.forEach((s) => (tokenOf[s] = k)));
+  const label = (src: number[]) => [...new Set(src.map((s) => tokenOf[s]))].map((k) => moveToString(a.recon.tokens[k].move)).join(' ');
+  const cells: HTMLElement[] = [];
+  r.events.forEach((e, i) => {
+    const gap = i ? e.beat - r.events[i - 1].beat - 1 : 0;
+    for (let k = 0; k < gap; k++) cells.push(h('span', { class: 'bt missed', title: 'No turn on this beat' }, '·'));
+    const kind = e.filler ? 'filler' : e.onBeat ? 'hit' : 'off';
+    const ms = Math.round(e.offsetMs);
+    cells.push(h('span', { class: `bt ${kind}`, title: `${e.filler ? 'Filler · ' : ''}${ms > 0 ? `${ms} ms late` : ms < 0 ? `${-ms} ms early` : 'on the beat'}` }, label(e.src)));
+  });
+  return h('section', { class: 'lookahead-result panel' },
+    h('div', { class: 'la-head' },
+      h('div', null,
+        h('strong', null, `${r.bpm} turns/min`), ' · ',
+        r.clean ? h('span', { class: 'good' }, 'clean') : h('span', { class: 'bad' }, 'not clean'),
+        h('div', { class: 'muted small' },
+          `${Math.round(r.accuracy * 100)}% on the beat · ${r.hits}/${r.beats} beats hit · ${r.missed} missed · ${r.extra} off the beat · `,
+          h('span', { class: r.fillers ? 'bad' : '' }, `${r.fillers} filler turn${r.fillers === 1 ? '' : 's'}`),
+          ` · lag ${Math.round(r.lagMs)} ms removed`)),
+      ui.nextLookahead ? h('button', { class: 'primary', onclick: () => ui.nextLookahead!() }, 'Next scramble') : null),
+    h('div', { class: 'beat-strip' }, cells),
+    h('div', { class: 'muted small' }, h('span', { class: 'bt hit' }, 'on beat'), ' ', h('span', { class: 'bt off' }, 'off beat'), ' ',
+      h('span', { class: 'bt filler' }, 'filler'), ' ', h('span', { class: 'bt missed' }, '·'), ' no turn'));
 }
 
 /** Overview panel: summary, timeline and stage table (rows jump to their step). */
@@ -52,7 +88,9 @@ export function overviewPanel(record: SolveRecord, a: Analysis, steps: Step[], u
   const turns = steps[0].yours.turns;
   const stepOf = (key: string) => steps.findIndex((s) => s.key === key);
   const keyOf = (i: number) => (segs[i].kind === 'cross' ? 'cross' : segs[i].kind === 'll' ? 'll' : `pair-${i}`);
+  const f2lOnly = record.goal === 'f2l';
   return h('div', { class: 'step-panel' },
+    lookaheadPanel(record, a, ui),
     h('div', { class: 'summary' },
       h('div', { class: 'big' }, fmtTime(total)),
       h('div', null, `${turns} turns · ${(turns / (total / 1000 || 1)).toFixed(1)} TPS · ${COLOUR_NAMES[a.recon.cross]} cross · ${new Date(record.startedAt).toLocaleString()}`),
@@ -60,6 +98,7 @@ export function overviewPanel(record: SolveRecord, a: Analysis, steps: Step[], u
       h('div', { class: 'muted small' }, 'Scramble: ', h('code', null, record.scramble)),
       h('a', { href: algCubingUrl(record.scramble, reconstructionText(a), `F2L Trainer ${new Date(record.startedAt).toLocaleDateString()}`), target: '_blank', rel: 'noopener' }, 'Reconstruction on alg.cubing.net')),
     h('div', { class: 'timeline' }, segs.map((s, i) => {
+      if (f2lOnly && s.kind === 'll') return null;
       const look = s.durationMs ? Math.min(1, s.recognitionMs / s.durationMs) : 0;
       return h('div', { class: `seg ${s.kind}`, style: { flexGrow: String(Math.max(s.durationMs, 1) / (total || 1)) }, title: `${sec(s.durationMs)} s (${pct(s.durationMs, total)}), look-ahead ${sec(s.recognitionMs)} s`, onclick: () => ui.goTo(stepOf(keyOf(i))) },
         h('div', { class: 'look', style: { width: `${(look * 100).toFixed(1)}%` } }),
@@ -123,6 +162,11 @@ export class AnalysisView implements View {
 
   constructor(private app: App) {}
 
+  /** The shown solve is the one just recorded (so the cube is where it ended). */
+  private get isLatest(): boolean {
+    return this.record !== null && this.record === this.app.recorder.record;
+  }
+
   get hasSolve(): boolean {
     return !!this.record;
   }
@@ -180,7 +224,10 @@ export class AnalysisView implements View {
       h('button', { class: 'mini', disabled: this.step === 0, onclick: () => this.goTo(this.step - 1) }, '← Prev'),
       this.steps.map((s, i) => h('button', { class: `tab ${i === this.step ? 'active' : ''} ${s.flags.length && s.key !== 'll' ? 'flagged' : ''}`, onclick: () => this.goTo(i) }, s.title)),
       h('button', { class: 'mini', disabled: this.step === this.steps.length - 1, onclick: () => this.goTo(this.step + 1) }, 'Next →'));
-    const ui: StepUi = { selected: this.selected?.id ?? null, goTo: (i) => this.goTo(i), play: (item) => this.play(item) };
+    const ui: StepUi = {
+      selected: this.selected?.id ?? null, goTo: (i) => this.goTo(i), play: (item) => this.play(item),
+      nextLookahead: this.record?.lookahead && this.isLatest ? () => this.app.nextLookahead() : undefined,
+    };
     clear(this.panel, step.key === 'overview' ? overviewPanel(this.record!, a, this.steps, ui) : stepPanel(step, ui));
     if (this.selected) this.load(this.selected, `Option: ${this.selected.alg}`);
     else this.load(step.yours, step.key === 'overview' ? 'Your whole solve' : `You: ${step.yours.alg || '—'}`);

@@ -49,6 +49,17 @@ export interface SolveRecord {
   gyro: GyroSample[];
   hardware: Hardware;
   status: 'ok' | 'desynced' | 'dnf';
+  /** What the solve ends on: a solved cube (the default) or F2L done (look-ahead training). */
+  goal?: 'solved' | 'f2l';
+  /** Look-ahead training: the metronome the solve was turned to. */
+  lookahead?: LookaheadInfo;
+}
+
+export interface LookaheadInfo {
+  /** Turns per minute. */
+  bpm: number;
+  /** Host time (performance.now) of the metronome's first click. */
+  beatZero: number;
 }
 
 /** A fixture: the derived record plus every device event from scramble start, for replaying the recorder. */

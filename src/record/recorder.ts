@@ -3,11 +3,28 @@
 
 import { type GanCubeEvent } from 'gan-web-bluetooth';
 import { applyMove, equalFacelets, fromFaceletString, solvedFacelets, toFaceletString, type Facelets } from '../cube/cube';
+import { crossSolved, slotSolved, slotsFor } from '../cube/pieces';
 import { checkRecord, isDesynced } from './checks';
 import { ScrambleTracker } from './scramble';
 import { type Face, type GyroSample, type Hardware, type RawMove, type SolveRecord } from './types';
 
 export type Phase = 'idle' | 'scrambling' | 'inspection' | 'solving' | 'awaitEnd' | 'done';
+
+export interface ScrambleOptions {
+  /** What ends the solve: a solved cube (default) or F2L done on any colour. */
+  goal?: 'solved' | 'f2l';
+  /**
+   * Scrambling from the current state rather than from solved: the same end state as a scramble from
+   * solved, which is what the record stores.
+   */
+  fromSolved?: string;
+}
+
+/** F2L done on some colour. */
+export function f2lDone(state: Facelets): boolean {
+  for (let c = 0; c < 6; c++) if (crossSolved(state, c) && slotsFor(c).every((s) => slotSolved(state, s))) return true;
+  return false;
+}
 
 export interface RecorderOptions {
   requestFacelets(): void;
@@ -31,6 +48,7 @@ export class Recorder {
   desyncs = 0;
 
   private scramble = '';
+  private goal: 'solved' | 'f2l' = 'solved';
   private startedAt = 0;
   private startFacelets = '';
   private scrambleMoves: RawMove[] = [];
@@ -50,6 +68,11 @@ export class Recorder {
     return this.synced && (this.phase === 'idle' || this.phase === 'done') && equalFacelets(this.state, solvedFacelets());
   }
 
+  /** Turns since the solve started. */
+  get solveMoves(): readonly RawMove[] {
+    return this.moves;
+  }
+
   get moveCount(): number {
     return this.moves.length;
   }
@@ -59,9 +82,17 @@ export class Recorder {
     return this.moves[0]?.hostTs ?? undefined;
   }
 
-  startScramble(scramble: string, startedAt = Date.now()) {
-    if (!this.canScramble) throw new Error('The cube must be connected and solved to start a scramble');
-    this.scramble = scramble;
+  /** Whether a scramble can start from the cube's current state (see ScrambleOptions.fromSolved). */
+  get canRescramble(): boolean {
+    return this.synced && (this.phase === 'idle' || this.phase === 'done');
+  }
+
+  startScramble(scramble: string, startedAt = Date.now(), opts: ScrambleOptions = {}) {
+    if (opts.fromSolved === undefined ? !this.canScramble : !this.canRescramble) {
+      throw new Error('The cube must be connected and solved to start a scramble');
+    }
+    this.scramble = opts.fromSolved ?? scramble;
+    this.goal = opts.goal ?? 'solved';
     this.startedAt = startedAt;
     this.startFacelets = '';
     this.scrambleMoves = [];
@@ -109,6 +140,7 @@ export class Recorder {
       hardware: { ...this.opts.hardware() },
       status: 'ok',
     };
+    if (this.goal !== 'solved') record.goal = this.goal;
     if (this.desyncs > 0 || isDesynced(checkRecord(record))) record.status = 'desynced';
     this.record = record;
     this.tracker = null;
@@ -151,7 +183,7 @@ export class Recorder {
         this.phase = 'solving';
       }
       this.moves.push(m);
-      if (equalFacelets(this.state, solvedFacelets())) {
+      if (this.goal === 'f2l' ? f2lDone(this.state) : equalFacelets(this.state, solvedFacelets())) {
         this.setPhase('awaitEnd');
         this.opts.requestFacelets();
       }

@@ -204,3 +204,23 @@ ul.options .cost { color: var(--muted); font-variant-numeric: tabular-nums; }
 .view.history h2:first-child { margin-top: 0; }
 .stats-panel h3 { margin: 20px 0 8px; font-size: 14px; }
 table.stats td:first-child { color: var(--muted); }
+
+/* ---- look-ahead ---- */
+
+.tempo-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 12px; }
+.tempo-bar > .muted { flex-basis: 100%; text-align: center; }
+.tempo .bpm { font: 600 32px/1 ui-monospace, 'SF Mono', Menlo, monospace; font-variant-numeric: tabular-nums; }
+.beats { display: flex; gap: 14px; }
+.beats .beat { width: 22px; height: 22px; border-radius: 50%; background: var(--panel-2); border: 1px solid var(--border); transition: background 0.04s; }
+.beats .beat:first-child { width: 26px; height: 26px; }
+.beats .beat.on { background: var(--accent); border-color: var(--accent); }
+.beats .beat:first-child.on { background: var(--flag); border-color: var(--flag); }
+.live-stats { min-height: 1.5em; font-variant-numeric: tabular-nums; }
+.lookahead-result { margin-bottom: 16px; display: flex; flex-direction: column; gap: 10px; }
+.la-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; }
+.beat-strip { display: flex; flex-wrap: wrap; gap: 4px; font-family: ui-monospace, 'SF Mono', Menlo, monospace; }
+.bt { display: inline-block; min-width: 2.4ch; padding: 1px 5px; border-radius: 5px; text-align: center; border: 1px solid transparent; }
+.bt.hit { background: rgba(74, 222, 128, 0.15); color: var(--good); }
+.bt.off { background: rgba(251, 191, 36, 0.15); color: var(--flag); }
+.bt.filler { background: rgba(248, 113, 113, 0.18); color: var(--bad); border-color: rgba(248, 113, 113, 0.5); }
+.bt.missed { color: var(--muted); }

@@ -24,6 +24,32 @@ Open the app in Chrome or Edge (`npm run dev`, then http://localhost:5173/).
 
 The old capture page is still at `/spike/` for recording fixtures.
 
+## Look-ahead training
+
+The **Look-ahead** tab trains solving F2L without pauses:
+
+1. Press **Start** and scramble. A metronome starts once the scramble is done.
+2. Make one turn on every click, and only turns that help F2L. The solve ends the moment F2L is done;
+   the last layer doesn't count.
+3. The usual analysis opens, with the look-ahead result on top. Every turn is shown on its beat:
+   on the beat, off the beat, filler, or a dot for a beat with no turn.
+4. **Next scramble** scrambles again from where the cube is, so you never solve the last layer.
+
+Scoring:
+
+- **On the beat.** A turn counts as on the beat if it lands within a quarter of a beat. A steady lag
+  between the click and the turn (Bluetooth, turn speed) is measured and removed first. Accuracy is
+  beats hit ÷ (beats + extra turns), so pauses and turns between the beats both count against you.
+- **Half turns and slices.** A half turn counts as one turn. Turns made together, like the two faces of
+  an `M`, count as one beat.
+- **Filler.** Within a run of turns on one axis, any turn that cancels out (`U U'`, or `U U2` instead of
+  `U'`) is filler.
+
+A solve is clean with at least 80% on the beat and no filler. Two clean solves in a row raise the
+tempo by 5 turns/min, and that tempo is saved as your comfortable tempo. Two misses in a row lower the
+tempo, and so does one solve under 60% on the beat. The tempo and comfortable tempo are saved between
+sessions. You can also set the tempo by hand.
+
 ## Development
 
 ```sh

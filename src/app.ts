@@ -11,10 +11,11 @@ import { Analyser } from './solve/client';
 import { AnalysisView } from './ui/analysis';
 import { clear, h, toast } from './ui/dom';
 import { HistoryView } from './ui/history';
+import { LookaheadView } from './ui/lookahead';
 import { SettingsView } from './ui/settings';
 import { SolveView } from './ui/solve';
 
-export type ViewName = 'solve' | 'analysis' | 'history' | 'settings';
+export type ViewName = 'solve' | 'lookahead' | 'analysis' | 'history' | 'settings';
 
 export interface View {
   el: HTMLElement;
@@ -35,13 +36,14 @@ export class App {
   });
   analyser = new Analyser();
   view: ViewName = 'solve';
-  views: { solve: SolveView; analysis: AnalysisView; history: HistoryView; settings: SettingsView } & Record<ViewName, View>;
+  views: { solve: SolveView; lookahead: LookaheadView; analysis: AnalysisView; history: HistoryView; settings: SettingsView } & Record<ViewName, View>;
   private header = h('header');
   private main = h('main');
 
   constructor(root: HTMLElement) {
     this.views = {
       solve: new SolveView(this),
+      lookahead: new LookaheadView(this),
       analysis: new AnalysisView(this),
       history: new HistoryView(this),
       settings: new SettingsView(this),
@@ -74,6 +76,12 @@ export class App {
     this.showView('analysis');
   }
 
+  /** Back to look-ahead training with the next scramble. */
+  nextLookahead() {
+    this.showView('lookahead');
+    void this.views.lookahead.next();
+  }
+
   private onPhase() {
     const { phase, record } = this.recorder;
     if (phase === 'awaitEnd') {
@@ -81,6 +89,7 @@ export class App {
         if (this.recorder.phase === 'awaitEnd') this.recorder.finish();
       }, END_FACELETS_TIMEOUT);
     } else if (phase === 'done' && record) {
+      this.views.lookahead.finishSolve(record);
       saveSolve(record).catch((e) => toast(`Could not save the solve: ${e}`, 'error'));
       if (record.status === 'desynced') toast('The cube and the recording disagree; this solve is marked desynced', 'error');
       this.openSolve(record);
@@ -97,6 +106,7 @@ export class App {
       toast('Cube disconnected', 'error');
     }
     if (this.view === 'solve') this.views.solve.onCubeEvent(e);
+    if (this.view === 'lookahead') this.views.lookahead.onCubeEvent(e);
   }
 
   async connectCube() {
@@ -132,6 +142,7 @@ export class App {
       h('div', { class: 'brand' }, 'F2L Trainer'),
       h('nav', null,
         tab('solve', 'Solve'),
+        tab('lookahead', 'Look-ahead'),
         this.views.analysis.hasSolve ? tab('analysis', 'Analysis') : null,
         tab('history', 'History'),
         tab('settings', 'Settings')),

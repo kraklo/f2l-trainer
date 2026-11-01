@@ -2,6 +2,7 @@
 // stored solves with backup and restore.
 
 import { type App, type View } from '../app';
+import { recordRhythm } from '../lookahead/rhythm';
 import { DEFAULT_NORMALISE, reconstruct } from '../normalise/normalise';
 import { deleteSolve, exportAll, importAll, listSolves } from '../record/store';
 import { type SolveRecord } from '../record/types';
@@ -18,6 +19,11 @@ function solveTime(r: SolveRecord): number | undefined {
 }
 
 const pct = (x: number) => `${Math.round(x * 100)}%`;
+
+function lookaheadText(s: SolveRecord): string {
+  const r = recordRhythm(s);
+  return r ? `${r.bpm}/min · ${pct(r.accuracy)} on beat · ${r.fillers} filler${r.clean ? ' ✓' : ''}` : '';
+}
 const secs = (ms: number) => (ms / 1000).toFixed(2);
 const WINDOWS: [string, number | undefined][] = [['Last 12', 12], ['Last 50', 50], ['All', undefined]];
 
@@ -126,11 +132,12 @@ export class HistoryView implements View {
   private solveList(solves: SolveRecord[]): HTMLElement {
     if (!solves.length) return h('p', { class: 'muted' }, 'No solves yet.');
     return h('table', { class: 'history-table' },
-      h('thead', null, h('tr', null, ['When', 'Time', 'Turns', 'Status', ''].map((t) => h('th', null, t)))),
+      h('thead', null, h('tr', null, ['When', 'Time', 'Turns', 'Look-ahead', 'Status', ''].map((t) => h('th', null, t)))),
       h('tbody', null, solves.map((s) => h('tr', { class: 'clickable', onclick: () => this.app.openSolve(s) },
         h('td', null, new Date(s.startedAt).toLocaleString()),
         h('td', { class: 'num' }, ((solveTime(s) ?? 0) / 1000).toFixed(2)),
         h('td', { class: 'num' }, String(s.moves.length)),
+        h('td', { class: 'muted' }, lookaheadText(s)),
         h('td', { class: s.status === 'ok' ? 'muted' : 'bad' }, s.status),
         h('td', null, h('button', { class: 'mini', onclick: (e: Event) => this.remove(e, s) }, 'Delete'))))));
   }

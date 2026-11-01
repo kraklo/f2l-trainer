@@ -11,8 +11,19 @@ import '../scramble-setup';
 import { type App, type View } from '../app';
 import { moveToString } from '../cube/cube';
 import { crossSolved, slotSolved, slotsFor } from '../cube/pieces';
+import { type ScrambleTracker } from '../record/scramble';
 import { CubeView } from '../render/cubeview';
 import { clear, h, toast } from './dom';
+
+/** A scramble row of fixed-width cells: done moves become dots, so nothing shifts. */
+export function scrambleRow(tracker: ScrambleTracker): HTMLElement {
+  const { done, next, undo } = tracker.display;
+  return h('div', null,
+    h('div', { class: 'muted small' }, 'Scramble with white on top, green in front'),
+    h('div', { class: 'scramble' }, tracker.moves.map((m, i) =>
+      h('span', { class: `mv ${i < done ? 'done' : i === done ? 'next' : ''}` }, i < done ? '·' : i === done && next ? next : moveToString(m)))),
+    h('div', { class: 'undo' }, undo ? `Undo: ${undo}` : ''));
+}
 
 const STAGE_NAMES = ['Cross', 'Pair 1', 'Pair 2', 'Pair 3', 'Pair 4'];
 
@@ -105,17 +116,6 @@ export class SolveView implements View {
     this.cubeView = null;
   }
 
-  /** A scramble row of fixed-width cells: done moves become dots, so nothing shifts. */
-  private scrambleRow(): HTMLElement {
-    const tracker = this.app.recorder.tracker!;
-    const { done, next, undo } = tracker.display;
-    return h('div', null,
-      h('div', { class: 'muted small' }, 'Scramble with white on top, green in front'),
-      h('div', { class: 'scramble' }, tracker.moves.map((m, i) =>
-        h('span', { class: `mv ${i < done ? 'done' : i === done ? 'next' : ''}` }, i < done ? '·' : i === done && next ? next : moveToString(m)))),
-      h('div', { class: 'undo' }, undo ? `Undo: ${undo}` : ''));
-  }
-
   render() {
     const { recorder, cube, settings } = this.app;
     if (settings.liveCube && !this.cubeView) {
@@ -137,7 +137,7 @@ export class SolveView implements View {
     let prompt: HTMLElement;
     switch (recorder.phase) {
       case 'scrambling':
-        prompt = this.scrambleRow();
+        prompt = scrambleRow(recorder.tracker!);
         break;
       case 'inspection':
         prompt = h('div', { class: 'prompt' }, 'Inspect. The timer starts on your first turn.');

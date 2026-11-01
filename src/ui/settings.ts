@@ -45,7 +45,7 @@ export class SettingsView implements View {
         : row('Hand-switch cost', num(a.sideSwitch, (v) => (a.sideSwitch = v), 0.1), 'Added when an R turn directly follows an L turn or vice versa. History can fit all move costs to your own speed.'),
       h('h2', null, 'Display'),
       row('Show the cube while solving', h('input', { type: 'checkbox', checked: s.liveCube, onchange: () => this.update(() => (s.liveCube = !s.liveCube)) })),
-      h('div', { class: 'controls' }, h('button', { onclick: () => this.update(() => (this.app.settings = structuredClone(DEFAULT_SETTINGS))) }, 'Restore defaults')),
+      h('div', { class: 'controls' }, h('button', { onclick: () => this.update(() => (this.app.settings = { ...structuredClone(DEFAULT_SETTINGS), lookahead: s.lookahead })) }, 'Restore defaults')),
       h('p', { class: 'muted small' }, 'Changes apply to the next analysis you open.'),
     );
   }

@@ -137,11 +137,11 @@ export function buildSteps(record: SolveRecord, a: Analysis): Step[] {
   const total = segs.reduce((s, x) => s + x.durationMs, 0);
   const turns = a.recon.tokens.filter((t) => !t.rotation).length;
   const ll = segs[segs.length - 1];
-  return [
+  const steps: Step[] = [
     {
       key: 'overview', title: 'Overview',
       yours: { setup: record.scramble, alg: solveAlg(a), turns, ms: total, lookMs: 0 },
-      groups: [], flags: [], goal: { kind: 'solve', cross: a.recon.cross },
+      groups: [], flags: [], goal: { kind: record.goal === 'f2l' ? 'none' : 'solve', cross: a.recon.cross },
     },
     crossStep(record, a),
     ...segs.flatMap((s, i) => (s.kind === 'pair' ? [pairStep(record, a, i)] : [])),
@@ -151,4 +151,6 @@ export function buildSteps(record: SolveRecord, a: Analysis): Step[] {
       groups: [], flags: ['The last layer is recorded but not analysed yet.'], goal: { kind: 'solve', cross: a.recon.cross },
     },
   ];
+  // Look-ahead solves stop at F2L: there is no last layer.
+  return record.goal === 'f2l' ? steps.filter((s) => s.key !== 'll') : steps;
 }
