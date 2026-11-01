@@ -27,7 +27,7 @@ describe('cross distance table', () => {
 });
 
 describe('cross solutions on 50 scrambles, every colour', () => {
-  it('are optimal or optimal + 1 and solve the cross in the sticker model', () => {
+  it('are optimal or optimal + 1 and solve the cross in the sticker model', { timeout: 20000 }, () => {
     for (const scramble of scrambles) {
       const core = applyMoves(solvedFacelets(), scramble);
       for (let colour = 0; colour < 6; colour++) {
@@ -37,10 +37,12 @@ describe('cross solutions on 50 scrambles, every colour', () => {
         const sols = crossSolutions(t, cross);
         expect(sols.length).toBeGreaterThan(0);
         expect(sols[0].length).toBe(opt);
-        for (const s of sols) {
-          expect(s.length === opt || s.length === opt + 1).toBe(true);
-          expect(crossSolved(applyMoves(v.facelets, movesToAlg(s)), D)).toBe(true);
-        }
+        // ~116k solutions in total: check with plain conditionals and assert once, since per-solution
+        // expect() calls dominate the runtime and push this past the timeout on CI runners
+        const bad = sols.filter(
+          (s) => (s.length !== opt && s.length !== opt + 1) || !crossSolved(applyMoves(v.facelets, movesToAlg(s)), D),
+        );
+        expect(bad.map(movesToAlg)).toEqual([]);
       }
     }
   });
