@@ -1,14 +1,17 @@
 // Look-ahead training: scores a solve turned to a metronome, and adapts the tempo.
 //
 // Turns come from the cube's quarter turns (core frame, so whole-cube rotations are invisible):
-// - two quarter turns of the same face and direction in quick succession are one half turn;
+// - two quarter turns of the same face and direction in quick succession are one half turn (as in the
+//   reconstruction, but never across a beat);
 // - turns that start together (an M is R and L' at once) are one event on one beat.
 // A filler turn is one that achieves nothing: within a run of turns on one axis (U and D commute),
-// whatever cancels out (U U', U U2 instead of U') is filler.
+// whatever cancels out (U U', U U2 instead of U') is filler. A half turn split into two quarter turns
+// in the same direction (U U, or r r across a rotation) is not filler: each quarter makes progress.
 //
 // The beat grid is the metronome's click times. A steady lag between click and turn (Bluetooth, the
 // time a turn takes to register) is measured as the median offset and removed before judging.
 
+import { DEFAULT_MERGE } from '../normalise/merge';
 import { fitTimes } from '../normalise/timefit';
 import { type Face, type LookaheadInfo, type RawMove, type SolveRecord } from '../record/types';
 
@@ -56,6 +59,9 @@ export const TOO_FAST_ACCURACY = 0.6;
 /** Turns closer than this (and at most this share of a beat) are one event. */
 const SAME_EVENT_MS = 100;
 const SAME_EVENT_FRAC = 0.35;
+/** Two quarter turns closer than this (and at most this share of a beat) are a half turn. */
+const HALF_TURN_MS = DEFAULT_MERGE.halfTurnGapMs;
+const HALF_TURN_FRAC = 0.5;
 
 interface Turn {
   face: Face;
@@ -85,7 +91,8 @@ export function mergeTurns(moves: RawMove[], times: number[], mergeMs: number): 
 
 /**
  * Marks filler turns: in each run of same-axis turns, a face's turns net out to at most one turn, so
- * all but the last of them (all of them, when they cancel) are filler. Returns the filler count.
+ * all but the last of them (all of them, when they cancel) are filler, unless they are just a half
+ * turn done as two quarters in the same direction. Returns the filler count.
  */
 export function markFillers(turns: Turn[]): number {
   let count = 0;
@@ -95,6 +102,8 @@ export function markFillers(turns: Turn[]): number {
     const run = turns.slice(i, j);
     for (const face of new Set(run.map((t) => t.face))) {
       const own = run.filter((t) => t.face === face);
+      // r r across a rotation, or a slow U U: one half turn, not filler
+      if (own.length === 2 && own.every((t) => t.amount === own[0].amount && t.amount !== 2)) continue;
       const net = own.reduce((s, t) => s + t.amount, 0) % 4;
       const wasted = net ? own.slice(0, -1) : own;
       for (const t of wasted) t.filler = true;
@@ -113,7 +122,7 @@ function median(xs: number[]): number {
 export function scoreRhythm(moves: RawMove[], info: LookaheadInfo, times = fitTimes(moves).times): Rhythm {
   const interval = 60000 / info.bpm;
   const sameEvent = Math.min(SAME_EVENT_MS, interval * SAME_EVENT_FRAC);
-  const turns = mergeTurns(moves, times, sameEvent);
+  const turns = mergeTurns(moves, times, Math.min(HALF_TURN_MS, interval * HALF_TURN_FRAC));
   const fillers = markFillers(turns);
 
   const groups: Turn[][] = [];

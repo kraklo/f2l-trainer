@@ -79,6 +79,20 @@ describe('scoreRhythm', () => {
     expect(r.events.map((e) => e.filler)).toEqual([true, false, false, false]);
   });
 
+  it('does not flag a half turn split into quarters, quick or across beats', () => {
+    // a quick double flick (136 ms apart) is one half turn on one beat
+    const quick = scoreRhythm(moves([['R', 1000], ["U'", 1500], ["U'", 1636], ['R', 2000]]), INFO);
+    expect(quick.turns).toBe(3);
+    expect(quick.events).toHaveLength(3);
+    expect(quick.fillers).toBe(0);
+    // r2 done as r r over two beats (mid rotation)
+    const split = scoreRhythm(moves(onBeat("R F' F' U")), INFO);
+    expect(split.fillers).toBe(0);
+    expect(split.clean).toBe(true);
+    // but three quarters the same way is a U' done the long way
+    expect(scoreRhythm(moves(onBeat("R U U U F")), INFO).fillers).toBe(2);
+  });
+
   it('treats simultaneous turns (a slice) as one beat and not as filler', () => {
     const spec: [string, number][] = [['R', 1000], ["L'", 1020], ['U', 1500], ['R', 2000]];
     const r = scoreRhythm(moves(spec), INFO);
@@ -156,7 +170,7 @@ describe.skipIf(!solveFixtureNames.length)('look-ahead recording', () => {
     const a = analyse(buildTables(), first)!;
     expect(a.recon.segments.at(-1)!.turns).toBe(0);
     expect(buildSteps(first, a).map((s) => s.key)).toEqual(['overview', 'cross', 'pair-1', 'pair-2', 'pair-3', 'pair-4']);
-  });
+  }, 30000); // builds the solver tables
 
   it('scrambles again from the unsolved last layer and records a scramble from solved', () => {
     const shown = "R U2 F' L D2 B R' U F2";

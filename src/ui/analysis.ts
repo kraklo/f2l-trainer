@@ -57,7 +57,14 @@ export function lookaheadPanel(record: SolveRecord, a: Analysis, ui: StepUi): HT
   if (!r) return null;
   const tokenOf: number[] = [];
   a.recon.tokens.forEach((t, k) => t.src.forEach((s) => (tokenOf[s] = k)));
-  const label = (src: number[]) => [...new Set(src.map((s) => tokenOf[s]))].map((k) => moveToString(a.recon.tokens[k].move)).join(' ');
+  // A token the event only has part of (a half turn split across beats) shows as its own quarter turn.
+  const label = (src: number[]) => [...new Set(src.map((s) => tokenOf[s]))].map((k) => {
+    const tok = a.recon.tokens[k];
+    const mine = tok.src.filter((s) => src.includes(s));
+    if (mine.length === tok.src.length) return moveToString(tok.move);
+    const quarters = mine.reduce((n, s) => n + record.moves[s].amount, 0) % 4;
+    return moveToString({ base: tok.move.base, amount: tok.move.amount === 2 ? quarters || 2 : quarters });
+  }).join(' ');
   const cells: HTMLElement[] = [];
   r.events.forEach((e, i) => {
     const gap = i ? e.beat - r.events[i - 1].beat - 1 : 0;
